@@ -1,0 +1,31 @@
+[
+    {
+        "name": "waf-tools",
+        "resolver": "git",
+        "method": "semver",
+        "major": 4,
+        "sources": [
+            "github.com/steinwurf/waf-tools.git"
+        ]
+    },
+    {
+        "name": "kodo-rlnc",
+        "optional": true,
+        "resolver": "git",
+        "method": "semver",
+        "major": 9,
+        "sources": [
+            "github.com/steinwurf/kodo-rlnc.git"
+        ]
+    },
+    {
+        "name": "gtest",
+        "internal": true,
+        "resolver": "git",
+        "method": "semver",
+        "major": 4,
+        "sources": [
+            "github.com/steinwurf/gtest.git"
+        ]
+    }
+]

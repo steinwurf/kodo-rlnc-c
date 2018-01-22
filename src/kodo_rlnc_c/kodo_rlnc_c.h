@@ -229,9 +229,9 @@ uint32_t kodo_rlnc_decoder_symbol_size(kodo_rlnc_decoder_t decoder);
 KODO_RLNC_API
 uint32_t kodo_rlnc_decoder_symbols(kodo_rlnc_decoder_t decoder);
 
-/// Specifies the data buffer where the decoder should store the decoded
-/// symbols. This will specify the storage for all symbols. If this is not
-/// desired.
+/// Specify the data buffer where the decoder should store the decoded
+/// symbols.
+/// This will specify the storage for all symbols.
 /// @param decoder The decoder which will decode the data
 /// @param data The buffer that should contain the decoded symbols
 /// @param size The size of the buffer to be decoded
@@ -299,12 +299,12 @@ uint32_t kodo_rlnc_decoder_rank(kodo_rlnc_decoder_t decoder);
 KODO_RLNC_API
 uint8_t kodo_rlnc_is_systematic_on(kodo_rlnc_encoder_t encoder);
 
-/// Switches the systematic encoding on
+/// Switch the systematic encoding on
 /// @param encoder The encoder
 KODO_RLNC_API
 void kodo_rlnc_set_systematic_on(kodo_rlnc_encoder_t encoder);
 
-/// Switches the systematic encoding off
+/// Switch the systematic encoding off
 /// @param encoder The encoder
 KODO_RLNC_API
 void kodo_rlnc_encoder_set_systematic_off(kodo_rlnc_encoder_t encoder);

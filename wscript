@@ -4,7 +4,7 @@
 import os
 
 APPNAME = 'kodo-rlnc-c'
-VERSION = '0.0.0'
+VERSION = '1.0.0'
 
 def build(bld):
 
@@ -19,17 +19,17 @@ def build(bld):
         'DEFINES_STEINWURF_VERSION',
         'STEINWURF_KODO_RLNC_C_VERSION="{}"'.format(VERSION))
 
-    # Build the kodo-c static library
+    # Build the kodo-rlnc-c static library
     bld.stlib(
         source=bld.path.ant_glob('src/kodo_rlnc_c/*.cpp'),
         target='kodo_rlnc_c_static',
         name='kodo_rlnc_c_static',
-        defines=['KODO_rlnc_C_STATIC'],
-        export_defines=['KODO_rlnc_C_STATIC'],
+        defines=['KODO_RLNC_C_STATIC'],
+        export_defines=['KODO_RLNC_C_STATIC'],
         export_includes='src',
         use=['kodo_rlnc'])
 
-    # Build the kodo-c shared library
+    # Build the kodo-rlnc-c shared library
     bld.shlib(
         source=bld.path.ant_glob('src/kodo_rlnc_c/*.cpp'),
         target='kodo_rlnc_c',

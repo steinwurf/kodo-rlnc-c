@@ -18,7 +18,6 @@
 #include <kodo_core/payload_info.hpp>
 #include <kodo_core/payload_rank_decoder.hpp>
 #include <kodo_core/plain_symbol_id_reader.hpp>
-#include <kodo_core/plain_symbol_id_size.hpp>
 #include <kodo_core/proxy_args.hpp>
 #include <kodo_core/rank_symbol_decoding_status_updater.hpp>
 #include <kodo_core/symbol_decoding_status_updater.hpp>
@@ -30,7 +29,10 @@
 
 namespace kodo_rlnc_c
 {
-using on_the_fly_decoder_stack = kodo_core::nested_write_payload<
+
+using on_the_fly_decoder_stack =
+    // Payload API
+    kodo_core::nested_write_payload<
     kodo_core::nested_set_seed<
     kodo_core::basic_proxy_stack<
     kodo_core::proxy_args<>, kodo_rlnc::on_the_fly_recoding_stack,
@@ -43,7 +45,6 @@ using on_the_fly_decoder_stack = kodo_core::nested_write_payload<
     kodo_core::symbol_id_decoder<
     // Symbol ID API
     kodo_core::plain_symbol_id_reader<
-    kodo_core::plain_symbol_id_size<
     // Decoder API
     kodo_core::symbol_decoding_status_updater<
     kodo_core::common_decoder_layers<
@@ -57,5 +58,5 @@ using on_the_fly_decoder_stack = kodo_core::nested_write_payload<
     kodo_core::trace_layer<
     // Final Layer
     kodo_core::final_layer
-    >>>>>>>>>>>>>>>>>;
+    >>>>>>>>>>>>>>>>;
 }

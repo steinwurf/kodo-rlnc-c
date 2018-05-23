@@ -94,13 +94,15 @@ uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t* factory);
 /// @param factory The factory which should be configured
 /// @param symbols the number of symbols
 KODO_RLNC_API
-void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory, uint32_t symbols);
+void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory,
+                                       uint32_t symbols);
 
 /// Set the symbol size
 /// @param factory The factory which should be configured
 /// @param the symbol size in bytes
 KODO_RLNC_API
-void krlnc_encoder_factory_set_symbol_size(krlnc_encoder_factory_t* factory, uint32_t symbol_size);
+void krlnc_encoder_factory_set_symbol_size(krlnc_encoder_factory_t* factory,
+                                           uint32_t symbol_size);
 
 /// Build the actual encoder
 /// @param factory The encoder factory which should be used to build the encoder
@@ -126,7 +128,9 @@ void krlnc_delete_encoder(krlnc_encoder_t* encoder);
 /// @return A new factory capable of building decoders using the
 ///         selected parameters.
 KODO_RLNC_API
-krlnc_decoder_factory_t* krlnc_new_decoder_factory(int32_t finite_field_id, uint32_t symbols, uint32_t symbol_size);
+krlnc_decoder_factory_t* krlnc_new_decoder_factory(int32_t finite_field_id,
+                                                   uint32_t symbols,
+                                                   uint32_t symbol_size);
 
 /// Deallocate and release the memory consumed by a factory
 /// @param factory The factory which should be deallocated
@@ -149,13 +153,15 @@ uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t* factory);
 /// @param factory The factory which should be configured
 /// @param symbols the number of symbols
 KODO_RLNC_API
-void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory, uint32_t symbols);
+void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory,
+                                       uint32_t symbols);
 
 /// Set the symbol size
 /// @param factory The factory which should be configured
 /// @param the symbol size in bytes
 KODO_RLNC_API
-void krlnc_decoder_factory_set_symbol_size(krlnc_decoder_factory_t* factory, uint32_t symbol_size);
+void krlnc_decoder_factory_set_symbol_size(krlnc_decoder_factory_t* factory,
+                                           uint32_t symbol_size);
 
 /// Build the actual decoder
 /// @param factory The decoder factory which should be used to build the decoder
@@ -204,7 +210,8 @@ uint32_t krlnc_encoder_payload_size(krlnc_encoder_t* encoder);
 /// @param payload The buffer which should contain the symbol.
 /// @return The total bytes used from the payload buffer
 KODO_RLNC_API
-uint32_t krlnc_encoder_write_payload(krlnc_encoder_t* encoder, uint8_t* payload);
+uint32_t krlnc_encoder_write_payload(krlnc_encoder_t* encoder,
+                                     uint8_t* payload);
 
 //------------------------------------------------------------------
 // SYMBOL STORAGE API DECODER

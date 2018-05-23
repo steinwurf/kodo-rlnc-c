@@ -14,17 +14,18 @@
 #include <kodo_rlnc/on_the_fly_codes.hpp>
 #include "on_the_fly_encoder_stack.hpp"
 #include "on_the_fly_decoder_stack.hpp"
-namespace {
+namespace
+{
 fifi::api::field build_finite_field(int32_t finite_field_id)
 {
     switch (finite_field_id)
     {
-        case krlnc_binary:
-            return fifi::api::field::binary;
-        case krlnc_binary4:
-            return fifi::api::field::binary4;
-        case krlnc_binary8:
-            return fifi::api::field::binary8;
+    case krlnc_binary:
+        return fifi::api::field::binary;
+    case krlnc_binary4:
+        return fifi::api::field::binary4;
+    case krlnc_binary8:
+        return fifi::api::field::binary8;
     default:
         assert(false && "Unknown field");
         return fifi::api::field::binary;
@@ -90,7 +91,8 @@ uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t* factory)
     return factory->m_impl.symbol_size();
 }
 
-void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory, uint32_t symbols)
+void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory,
+                                       uint32_t symbols)
 {
     assert(factory != nullptr);
     factory->m_impl.set_symbols(symbols);
@@ -146,7 +148,8 @@ uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t* factory)
     return factory->m_impl.symbol_size();
 }
 
-void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory, uint32_t symbols)
+void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory,
+                                       uint32_t symbols)
 {
     assert(factory != nullptr);
     factory->m_impl.set_symbols(symbols);

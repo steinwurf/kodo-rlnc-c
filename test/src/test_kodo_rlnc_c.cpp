@@ -92,7 +92,7 @@ TEST(test_kodo_rlnc_c, api)
     krlnc_encoder_set_systematic_off(encoder);
 
     EXPECT_EQ(0U, krlnc_decoder_rank(decoder));
-    while(!krlnc_decoder_is_complete(decoder))
+    while (!krlnc_decoder_is_complete(decoder))
     {
         krlnc_encoder_write_payload(encoder, payload.data());
         krlnc_decoder_read_payload(decoder, payload.data());

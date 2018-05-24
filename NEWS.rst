@@ -6,6 +6,7 @@ of every change, see the Git log.
 
 Latest
 ------
+* Minor: Added support for binary16 finite field.
 * Major: Switch from using kodo-rlnc's mix-in layer stacks to using the
   wrappers.
 * Major: Upgraded to kodo-rlnc 11.

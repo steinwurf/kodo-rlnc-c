@@ -14,95 +14,95 @@ TEST(test_kodo_rlnc_c, factory_api)
 {
     uint32_t symbols = 50;
     uint32_t symbol_size = 750;
-    auto decoder_factory = kodo_rlnc_decoder_factory_construct(
-        kodo_rlnc_binary8, symbols, symbol_size);
+    auto decoder_factory = krlnc_new_decoder_factory(
+        krlnc_binary8, symbols, symbol_size);
 
-    auto encoder_factory = kodo_rlnc_encoder_factory_construct(
-        kodo_rlnc_binary8, symbols, symbol_size);
+    auto encoder_factory = krlnc_new_encoder_factory(
+        krlnc_binary8, symbols, symbol_size);
 
-    EXPECT_EQ(symbols, kodo_rlnc_decoder_factory_symbols(decoder_factory));
-    EXPECT_EQ(symbols, kodo_rlnc_encoder_factory_symbols(encoder_factory));
+    EXPECT_EQ(symbols, krlnc_decoder_factory_symbols(decoder_factory));
+    EXPECT_EQ(symbols, krlnc_encoder_factory_symbols(encoder_factory));
 
-    EXPECT_EQ(symbol_size, kodo_rlnc_encoder_factory_symbol_size(encoder_factory));
-    EXPECT_EQ(symbol_size, kodo_rlnc_decoder_factory_symbol_size(decoder_factory));
+    EXPECT_EQ(symbol_size, krlnc_encoder_factory_symbol_size(encoder_factory));
+    EXPECT_EQ(symbol_size, krlnc_decoder_factory_symbol_size(decoder_factory));
 
     uint32_t new_symbols = 25;
 
-    kodo_rlnc_encoder_factory_set_symbols(encoder_factory, new_symbols);
-    EXPECT_EQ(new_symbols, kodo_rlnc_encoder_factory_symbols(encoder_factory));
+    krlnc_encoder_factory_set_symbols(encoder_factory, new_symbols);
+    EXPECT_EQ(new_symbols, krlnc_encoder_factory_symbols(encoder_factory));
 
-    kodo_rlnc_decoder_factory_set_symbols(decoder_factory, new_symbols);
-    EXPECT_EQ(new_symbols, kodo_rlnc_decoder_factory_symbols(decoder_factory));
+    krlnc_decoder_factory_set_symbols(decoder_factory, new_symbols);
+    EXPECT_EQ(new_symbols, krlnc_decoder_factory_symbols(decoder_factory));
 
     uint32_t new_symbol_size = 300;
 
-    kodo_rlnc_encoder_factory_set_symbol_size(encoder_factory, new_symbol_size);
-    EXPECT_EQ(new_symbol_size, kodo_rlnc_encoder_factory_symbol_size(encoder_factory));
+    krlnc_encoder_factory_set_symbol_size(encoder_factory, new_symbol_size);
+    EXPECT_EQ(new_symbol_size, krlnc_encoder_factory_symbol_size(encoder_factory));
 
-    kodo_rlnc_decoder_factory_set_symbol_size(decoder_factory, new_symbol_size);
-    EXPECT_EQ(new_symbol_size, kodo_rlnc_decoder_factory_symbol_size(decoder_factory));
+    krlnc_decoder_factory_set_symbol_size(decoder_factory, new_symbol_size);
+    EXPECT_EQ(new_symbol_size, krlnc_decoder_factory_symbol_size(decoder_factory));
 
-    kodo_rlnc_decoder_factory_destruct(decoder_factory);
-    kodo_rlnc_encoder_factory_destruct(encoder_factory);
+    krlnc_delete_decoder_factory(decoder_factory);
+    krlnc_delete_encoder_factory(encoder_factory);
 }
 
 TEST(test_kodo_rlnc_c, api)
 {
     uint32_t symbols = 50;
     uint32_t symbol_size = 750;
-    auto decoder_factory = kodo_rlnc_decoder_factory_construct(
-        kodo_rlnc_binary8, symbols, symbol_size);
+    auto decoder_factory = krlnc_new_decoder_factory(
+        krlnc_binary8, symbols, symbol_size);
 
-    auto encoder_factory = kodo_rlnc_encoder_factory_construct(
-        kodo_rlnc_binary8, symbols, symbol_size);
+    auto encoder_factory = krlnc_new_encoder_factory(
+        krlnc_binary8, symbols, symbol_size);
 
-    auto decoder = kodo_rlnc_decoder_factory_build(decoder_factory);
-    auto encoder = kodo_rlnc_encoder_factory_build(encoder_factory);
+    auto decoder = krlnc_decoder_factory_build(decoder_factory);
+    auto encoder = krlnc_encoder_factory_build(encoder_factory);
 
     EXPECT_EQ(
-        kodo_rlnc_decoder_block_size(decoder),
-        kodo_rlnc_encoder_block_size(encoder));
+        krlnc_decoder_block_size(decoder),
+        krlnc_encoder_block_size(encoder));
 
-    EXPECT_EQ(symbol_size, kodo_rlnc_decoder_symbol_size(decoder));
-    EXPECT_EQ(symbols, kodo_rlnc_decoder_symbols(decoder));
+    EXPECT_EQ(symbol_size, krlnc_decoder_symbol_size(decoder));
+    EXPECT_EQ(symbols, krlnc_decoder_symbols(decoder));
 
-    EXPECT_EQ(symbol_size, kodo_rlnc_encoder_symbol_size(encoder));
-    EXPECT_EQ(symbols, kodo_rlnc_encoder_symbols(encoder));
+    EXPECT_EQ(symbol_size, krlnc_encoder_symbol_size(encoder));
+    EXPECT_EQ(symbols, krlnc_encoder_symbols(encoder));
 
-    std::vector<uint8_t> data_in(kodo_rlnc_encoder_block_size(encoder));
+    std::vector<uint8_t> data_in(krlnc_encoder_block_size(encoder));
     std::generate(data_in.begin(), data_in.end(), rand);
-    kodo_rlnc_encoder_set_const_symbols(
+    krlnc_encoder_set_const_symbols(
         encoder, data_in.data(), data_in.size());
 
-    std::vector<uint8_t> data_out(kodo_rlnc_decoder_block_size(decoder));
-    kodo_rlnc_decoder_set_mutable_symbols(
+    std::vector<uint8_t> data_out(krlnc_decoder_block_size(decoder));
+    krlnc_decoder_set_mutable_symbols(
         decoder, data_out.data(), data_out.size());
 
     EXPECT_EQ(
-        kodo_rlnc_decoder_payload_size(decoder),
-        kodo_rlnc_encoder_payload_size(encoder));
+        krlnc_decoder_payload_size(decoder),
+        krlnc_encoder_payload_size(encoder));
 
-    std::vector<uint8_t> payload(kodo_rlnc_encoder_payload_size(encoder));
+    std::vector<uint8_t> payload(krlnc_encoder_payload_size(encoder));
 
-    EXPECT_TRUE(kodo_rlnc_is_systematic_on(encoder));
-    kodo_rlnc_encoder_set_systematic_off(encoder);
-    EXPECT_FALSE(kodo_rlnc_is_systematic_on(encoder));
-    kodo_rlnc_set_systematic_on(encoder);
-    EXPECT_TRUE(kodo_rlnc_is_systematic_on(encoder));
-    kodo_rlnc_encoder_set_systematic_off(encoder);
+    EXPECT_TRUE(krlnc_is_systematic_on(encoder));
+    krlnc_encoder_set_systematic_off(encoder);
+    EXPECT_FALSE(krlnc_is_systematic_on(encoder));
+    krlnc_set_systematic_on(encoder);
+    EXPECT_TRUE(krlnc_is_systematic_on(encoder));
+    krlnc_encoder_set_systematic_off(encoder);
 
-    EXPECT_EQ(0U, kodo_rlnc_decoder_rank(decoder));
-    while(!kodo_rlnc_decoder_is_complete(decoder))
+    EXPECT_EQ(0U, krlnc_decoder_rank(decoder));
+    while (!krlnc_decoder_is_complete(decoder))
     {
-        kodo_rlnc_encoder_write_payload(encoder, payload.data());
-        kodo_rlnc_decoder_read_payload(decoder, payload.data());
+        krlnc_encoder_write_payload(encoder, payload.data());
+        krlnc_decoder_read_payload(decoder, payload.data());
     }
-    EXPECT_EQ(symbols, kodo_rlnc_decoder_rank(decoder));
+    EXPECT_EQ(symbols, krlnc_decoder_rank(decoder));
 
     EXPECT_EQ(data_in, data_out);
 
-    kodo_rlnc_decoder_destruct(decoder);
-    kodo_rlnc_encoder_destruct(encoder);
-    kodo_rlnc_decoder_factory_destruct(decoder_factory);
-    kodo_rlnc_encoder_factory_destruct(encoder_factory);
+    krlnc_delete_decoder(decoder);
+    krlnc_delete_encoder(encoder);
+    krlnc_delete_decoder_factory(decoder_factory);
+    krlnc_delete_encoder_factory(encoder_factory);
 }

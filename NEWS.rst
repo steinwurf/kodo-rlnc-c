@@ -6,6 +6,10 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+2.0.0
+-----
 * Minor: Added support for binary16 finite field.
 * Patch: Fix defines so that the library now works on Windows.
 * Major: Switch from using kodo-rlnc's mix-in layer stacks to using the

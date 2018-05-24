@@ -53,9 +53,10 @@ typedef enum
 {
     krlnc_binary,
     krlnc_binary4,
-    krlnc_binary8
+    krlnc_binary8,
+    krlnc_binary16
 }
-kodo_rlnc_finite_field;
+krlnc_finite_field;
 
 //------------------------------------------------------------------
 // ENCODER FACTORY API

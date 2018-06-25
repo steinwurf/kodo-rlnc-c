@@ -17,17 +17,11 @@ project_dependencies = \
         'boost',
         'allocate',
         'storage',
-        'gauge',
-        'tables',
         'cpuid',
         'platform',
-        'stub',
-        'recycle',
         'endian',
         'hex',
-        'meta',
         'fifi',
-        'gauge',
         'kodo-core',
         'kodo-rlnc'
     ]

@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+3.0.0
+-----
+* Major: Upgrade to kodo-rlnc 13
+
 2.0.0
 -----
 * Minor: Added support for binary16 finite field.

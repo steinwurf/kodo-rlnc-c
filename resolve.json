@@ -13,7 +13,7 @@
         "optional": true,
         "resolver": "git",
         "method": "semver",
-        "major": 11,
+        "major": 13,
         "sources": [
             "github.com/steinwurf/kodo-rlnc.git"
         ]

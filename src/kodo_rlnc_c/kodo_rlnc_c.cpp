@@ -11,13 +11,11 @@
 #include <string>
 
 #include <storage/storage.hpp>
-#include <kodo_rlnc/on_the_fly_codes.hpp>
-#include <kodo_rlnc/on_the_fly_encoder.hpp>
-#include <kodo_rlnc/on_the_fly_decoder.hpp>
+#include <kodo_rlnc/coders.hpp>
 
 struct krlnc_decoder
 {
-    kodo_rlnc::on_the_fly_decoder::factory::pointer m_impl;
+    kodo_rlnc::decoder::factory::pointer m_impl;
 };
 
 struct krlnc_decoder_factory
@@ -26,12 +24,12 @@ struct krlnc_decoder_factory
     krlnc_decoder_factory(Args&&... args) :
         m_impl(std::forward<Args>(args)...)
     { }
-    kodo_rlnc::on_the_fly_decoder::factory m_impl;
+    kodo_rlnc::decoder::factory m_impl;
 };
 
 struct krlnc_encoder
 {
-    kodo_rlnc::on_the_fly_encoder::factory::pointer m_impl;
+    kodo_rlnc::encoder::factory::pointer m_impl;
 };
 
 struct krlnc_encoder_factory
@@ -41,26 +39,8 @@ struct krlnc_encoder_factory
         m_impl(std::forward<Args>(args)...)
     { }
 
-    kodo_rlnc::on_the_fly_encoder::factory m_impl;
+    kodo_rlnc::encoder::factory m_impl;
 };
-
-int32_t kslide_field_to_c_field(fifi::api::field field_id)
-{
-    switch (field_id)
-    {
-    case fifi::api::field::binary:
-        return krlnc_binary;
-    case fifi::api::field::binary4:
-        return krlnc_binary4;
-    case fifi::api::field::binary8:
-        return krlnc_binary8;
-    case fifi::api::field::binary16:
-        return krlnc_binary16;
-    default:
-        assert(false && "Unknown field");
-        return krlnc_binary;
-    }
-}
 
 fifi::api::field c_field_to_krlnc_field(int32_t c_field)
 {
@@ -77,6 +57,22 @@ fifi::api::field c_field_to_krlnc_field(int32_t c_field)
     default:
         assert(false && "Unknown field");
         return fifi::api::field::binary;
+    }
+}
+
+kodo_rlnc::coding_vector_format c_format_to_krlnc_format(int32_t c_format)
+{
+    switch (c_format)
+    {
+    case krlnc_full_vector:
+        return kodo_rlnc::coding_vector_format::full_vector;
+    case krlnc_seed:
+        return kodo_rlnc::coding_vector_format::seed;
+    case krlnc_sparse_seed:
+        return kodo_rlnc::coding_vector_format::sparse_seed;
+    default:
+        assert(false && "Unknown coding vector format");
+        return kodo_rlnc::coding_vector_format::full_vector;
     }
 }
 
@@ -121,6 +117,13 @@ void krlnc_encoder_factory_set_symbol_size(
 {
     assert(factory != nullptr);
     factory->m_impl.set_symbol_size(symbol_size);
+}
+
+void krlnc_encoder_factory_set_coding_vector_format(
+    krlnc_encoder_factory_t* factory, int32_t format_id)
+{
+    auto format = c_format_to_krlnc_format(format_id);
+    factory->m_impl.set_coding_vector_format(format);
 }
 
 krlnc_encoder_t* krlnc_encoder_factory_build(krlnc_encoder_factory_t* factory)
@@ -180,6 +183,13 @@ void krlnc_decoder_factory_set_symbol_size(
     factory->m_impl.set_symbol_size(symbol_size);
 }
 
+void krlnc_decoder_factory_set_coding_vector_format(
+    krlnc_decoder_factory_t* factory, int32_t format_id)
+{
+    auto format = c_format_to_krlnc_format(format_id);
+    factory->m_impl.set_coding_vector_format(format);
+}
+
 krlnc_decoder_t* krlnc_decoder_factory_build(krlnc_decoder_factory_t* factory)
 {
     assert(factory != nullptr);
@@ -208,6 +218,12 @@ void krlnc_decoder_read_payload(krlnc_decoder_t* decoder, uint8_t* payload)
 {
     assert(decoder != nullptr);
     decoder->m_impl->read_payload(payload);
+}
+
+uint32_t krlnc_decoder_write_payload(krlnc_decoder_t* decoder, uint8_t* payload)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->write_payload(payload);
 }
 
 //------------------------------------------------------------------
@@ -304,13 +320,13 @@ uint32_t krlnc_decoder_rank(krlnc_decoder_t* decoder)
 // ENCODER API
 //------------------------------------------------------------------
 
-uint8_t krlnc_is_systematic_on(krlnc_encoder_t* encoder)
+uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t* encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->is_systematic_on();
 }
 
-void krlnc_set_systematic_on(krlnc_encoder_t* encoder)
+void krlnc_encoder_set_systematic_on(krlnc_encoder_t* encoder)
 {
     encoder->m_impl->set_systematic_on();
 }

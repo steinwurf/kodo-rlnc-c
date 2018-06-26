@@ -58,6 +58,20 @@ typedef enum
 }
 krlnc_finite_field;
 
+/// Enum specifying the available coding vector formats
+/// Note: the size of the enum type cannot be guaranteed, so the int32_t type
+/// is used in the API calls to pass the enum values
+typedef enum
+{
+    /// Send the full encoding vector
+    krlnc_full_vector,
+    /// Only send a 4-byte random seed
+    krlnc_seed,
+    /// Send the density as a 4-byte float and the 4-byte random seed
+    krlnc_sparse_seed
+}
+krlnc_coding_vector_format;
+
 //------------------------------------------------------------------
 // ENCODER FACTORY API
 //------------------------------------------------------------------
@@ -87,7 +101,7 @@ uint32_t krlnc_encoder_factory_symbols(krlnc_encoder_factory_t* factory);
 
 /// Return the symbol size in bytes
 /// @param factory The factory to query
-/// @return the symbol size in bytes
+/// @return symbol_size the symbol size in bytes
 KODO_RLNC_API
 uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t* factory);
 
@@ -95,15 +109,22 @@ uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t* factory);
 /// @param factory The factory which should be configured
 /// @param symbols the number of symbols
 KODO_RLNC_API
-void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory,
-                                       uint32_t symbols);
+void krlnc_encoder_factory_set_symbols(
+    krlnc_encoder_factory_t* factory, uint32_t symbols);
 
 /// Set the symbol size
 /// @param factory The factory which should be configured
-/// @param the symbol size in bytes
+/// @param symbol_size the symbol size in bytes
 KODO_RLNC_API
-void krlnc_encoder_factory_set_symbol_size(krlnc_encoder_factory_t* factory,
-                                           uint32_t symbol_size);
+void krlnc_encoder_factory_set_symbol_size(
+    krlnc_encoder_factory_t* factory, uint32_t symbol_size);
+
+/// Set the coding vector format
+/// @param factory The factory which should be configured
+/// @param format_id The selected coding vector format
+KODO_RLNC_API
+void krlnc_encoder_factory_set_coding_vector_format(
+    krlnc_encoder_factory_t* factory, int32_t format_id);
 
 /// Build the actual encoder
 /// @param factory The encoder factory which should be used to build the encoder
@@ -129,9 +150,8 @@ void krlnc_delete_encoder(krlnc_encoder_t* encoder);
 /// @return A new factory capable of building decoders using the
 ///         selected parameters.
 KODO_RLNC_API
-krlnc_decoder_factory_t* krlnc_new_decoder_factory(int32_t finite_field_id,
-                                                   uint32_t symbols,
-                                                   uint32_t symbol_size);
+krlnc_decoder_factory_t* krlnc_new_decoder_factory(
+    int32_t finite_field_id, uint32_t symbols, uint32_t symbol_size);
 
 /// Deallocate and release the memory consumed by a factory
 /// @param factory The factory which should be deallocated
@@ -154,15 +174,22 @@ uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t* factory);
 /// @param factory The factory which should be configured
 /// @param symbols the number of symbols
 KODO_RLNC_API
-void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory,
-                                       uint32_t symbols);
+void krlnc_decoder_factory_set_symbols(
+    krlnc_decoder_factory_t* factory,uint32_t symbols);
 
 /// Set the symbol size
 /// @param factory The factory which should be configured
-/// @param the symbol size in bytes
+/// @param symbol_size the symbol size in bytes
 KODO_RLNC_API
-void krlnc_decoder_factory_set_symbol_size(krlnc_decoder_factory_t* factory,
-                                           uint32_t symbol_size);
+void krlnc_decoder_factory_set_symbol_size(
+    krlnc_decoder_factory_t* factory, uint32_t symbol_size);
+
+/// Set the coding vector format
+/// @param factory The factory which should be configured
+/// @param format_id The selected coding vector format
+KODO_RLNC_API
+void krlnc_decoder_factory_set_coding_vector_format(
+    krlnc_decoder_factory_t* factory, int32_t format_id);
 
 /// Build the actual decoder
 /// @param factory The decoder factory which should be used to build the decoder
@@ -195,6 +222,14 @@ uint32_t krlnc_decoder_payload_size(krlnc_decoder_t* decoder);
 KODO_RLNC_API
 void krlnc_decoder_read_payload(krlnc_decoder_t* decoder, uint8_t* payload);
 
+/// Write a recoded symbol into the provided payload buffer.
+/// @param decoder The decoder to use.
+/// @param payload The buffer which should contain the recoded symbol.
+/// @return The total bytes used from the payload buffer
+KODO_RLNC_API
+uint32_t krlnc_decoder_write_payload(
+    krlnc_decoder_t* decoder, uint8_t* payload);
+
 //------------------------------------------------------------------
 // PAYLOAD API ENCODER
 //------------------------------------------------------------------
@@ -211,8 +246,8 @@ uint32_t krlnc_encoder_payload_size(krlnc_encoder_t* encoder);
 /// @param payload The buffer which should contain the symbol.
 /// @return The total bytes used from the payload buffer
 KODO_RLNC_API
-uint32_t krlnc_encoder_write_payload(krlnc_encoder_t* encoder,
-                                     uint8_t* payload);
+uint32_t krlnc_encoder_write_payload(
+    krlnc_encoder_t* encoder, uint8_t* payload);
 
 //------------------------------------------------------------------
 // SYMBOL STORAGE API DECODER
@@ -305,12 +340,12 @@ uint32_t krlnc_decoder_rank(krlnc_decoder_t* decoder);
 /// @param encoder The encoder
 /// @return Non-zero if the encoder is in the systematic mode, otherwise 0
 KODO_RLNC_API
-uint8_t krlnc_is_systematic_on(krlnc_encoder_t* encoder);
+uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t* encoder);
 
 /// Switch the systematic encoding on
 /// @param encoder The encoder
 KODO_RLNC_API
-void krlnc_set_systematic_on(krlnc_encoder_t* encoder);
+void krlnc_encoder_set_systematic_on(krlnc_encoder_t* encoder);
 
 /// Switch the systematic encoding off
 /// @param encoder The encoder

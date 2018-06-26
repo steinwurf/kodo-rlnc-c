@@ -11,13 +11,11 @@
 #include <string>
 
 #include <storage/storage.hpp>
-#include <kodo_rlnc/on_the_fly_codes.hpp>
-#include <kodo_rlnc/on_the_fly_encoder.hpp>
-#include <kodo_rlnc/on_the_fly_decoder.hpp>
+#include <kodo_rlnc/coders.hpp>
 
 struct krlnc_decoder
 {
-    kodo_rlnc::on_the_fly_decoder::factory::pointer m_impl;
+    kodo_rlnc::decoder::factory::pointer m_impl;
 };
 
 struct krlnc_decoder_factory
@@ -26,12 +24,12 @@ struct krlnc_decoder_factory
     krlnc_decoder_factory(Args&&... args) :
         m_impl(std::forward<Args>(args)...)
     { }
-    kodo_rlnc::on_the_fly_decoder::factory m_impl;
+    kodo_rlnc::decoder::factory m_impl;
 };
 
 struct krlnc_encoder
 {
-    kodo_rlnc::on_the_fly_encoder::factory::pointer m_impl;
+    kodo_rlnc::encoder::factory::pointer m_impl;
 };
 
 struct krlnc_encoder_factory
@@ -41,7 +39,7 @@ struct krlnc_encoder_factory
         m_impl(std::forward<Args>(args)...)
     { }
 
-    kodo_rlnc::on_the_fly_encoder::factory m_impl;
+    kodo_rlnc::encoder::factory m_impl;
 };
 
 int32_t kslide_field_to_c_field(fifi::api::field field_id)

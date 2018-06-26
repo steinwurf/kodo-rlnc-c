@@ -78,9 +78,9 @@ TEST(test_kodo_rlnc_c, api)
     krlnc_decoder_set_mutable_symbols(
         decoder, data_out.data(), data_out.size());
 
-    EXPECT_EQ(
-        krlnc_decoder_payload_size(decoder),
-        krlnc_encoder_payload_size(encoder));
+    EXPECT_LE(
+        krlnc_encoder_payload_size(encoder),
+        krlnc_decoder_payload_size(decoder));
 
     std::vector<uint8_t> payload(krlnc_encoder_payload_size(encoder));
 

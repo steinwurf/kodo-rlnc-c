@@ -10,7 +10,6 @@
     },
     {
         "name": "kodo-rlnc",
-        "optional": true,
         "resolver": "git",
         "method": "semver",
         "major": 13,

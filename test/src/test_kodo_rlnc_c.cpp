@@ -123,8 +123,10 @@ TEST(test_kodo_rlnc_c, api)
     EXPECT_EQ(data_in, data_out1);
     EXPECT_EQ(data_in, data_out2);
 
-    krlnc_delete_decoder(decoder1);
     krlnc_delete_encoder(encoder);
-    krlnc_delete_decoder_factory(decoder_factory);
+    krlnc_delete_decoder(decoder1);
+    krlnc_delete_decoder(decoder2);
+
     krlnc_delete_encoder_factory(encoder_factory);
+    krlnc_delete_decoder_factory(decoder_factory);
 }

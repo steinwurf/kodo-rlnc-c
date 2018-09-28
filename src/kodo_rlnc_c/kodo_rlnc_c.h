@@ -39,12 +39,12 @@ extern "C" {
 //------------------------------------------------------------------
 
 /// Opaque pointer used for the encoder and decoder factories
-typedef struct krlnc_encoder_factory krlnc_encoder_factory_t;
-typedef struct krlnc_decoder_factory krlnc_decoder_factory_t;
+typedef struct krlnc_encoder_factory* krlnc_encoder_factory_t;
+typedef struct krlnc_decoder_factory* krlnc_decoder_factory_t;
 
 /// Opaque pointer used for decoders, encoders
-typedef struct krlnc_encoder krlnc_encoder_t;
-typedef struct krlnc_decoder krlnc_decoder_t;
+typedef struct krlnc_encoder* krlnc_encoder_t;
+typedef struct krlnc_decoder* krlnc_decoder_t;
 
 /// Enum specifying the available finite fields
 /// Note: the size of the enum type cannot be guaranteed, so the int32_t type
@@ -85,57 +85,57 @@ krlnc_coding_vector_format;
 /// @return A new factory capable of building encoders using the
 ///         selected parameters.
 KODO_RLNC_API
-krlnc_encoder_factory_t* krlnc_new_encoder_factory(
+krlnc_encoder_factory_t krlnc_new_encoder_factory(
     int32_t finite_field_id, uint32_t symbols, uint32_t symbol_size);
 
 /// Deallocate and release the memory consumed by a factory
 /// @param factory The factory which should be deallocated
 KODO_RLNC_API
-void krlnc_delete_encoder_factory(krlnc_encoder_factory_t* factory);
+void krlnc_delete_encoder_factory(krlnc_encoder_factory_t factory);
 
 /// Return the number of symbols in a block
 /// @param factory The factory to query
 /// @return the number of symbols in a block
 KODO_RLNC_API
-uint32_t krlnc_encoder_factory_symbols(krlnc_encoder_factory_t* factory);
+uint32_t krlnc_encoder_factory_symbols(krlnc_encoder_factory_t factory);
 
 /// Return the symbol size in bytes
 /// @param factory The factory to query
 /// @return symbol_size the symbol size in bytes
 KODO_RLNC_API
-uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t* factory);
+uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t factory);
 
 /// Set the number of symbols
 /// @param factory The factory which should be configured
 /// @param symbols the number of symbols
 KODO_RLNC_API
 void krlnc_encoder_factory_set_symbols(
-    krlnc_encoder_factory_t* factory, uint32_t symbols);
+    krlnc_encoder_factory_t factory, uint32_t symbols);
 
 /// Set the symbol size
 /// @param factory The factory which should be configured
 /// @param symbol_size the symbol size in bytes
 KODO_RLNC_API
 void krlnc_encoder_factory_set_symbol_size(
-    krlnc_encoder_factory_t* factory, uint32_t symbol_size);
+    krlnc_encoder_factory_t factory, uint32_t symbol_size);
 
 /// Set the coding vector format
 /// @param factory The factory which should be configured
 /// @param format_id The selected coding vector format
 KODO_RLNC_API
 void krlnc_encoder_factory_set_coding_vector_format(
-    krlnc_encoder_factory_t* factory, int32_t format_id);
+    krlnc_encoder_factory_t factory, int32_t format_id);
 
 /// Build the actual encoder
 /// @param factory The encoder factory which should be used to build the encoder
 /// @return pointer to an instantiation of an encoder
 KODO_RLNC_API
-krlnc_encoder_t* krlnc_encoder_factory_build(krlnc_encoder_factory_t* factory);
+krlnc_encoder_t krlnc_encoder_factory_build(krlnc_encoder_factory_t factory);
 
 /// Deallocate and release the memory consumed by an encoder
 /// @param encoder The encoder which should be deallocated
 KODO_RLNC_API
-void krlnc_delete_encoder(krlnc_encoder_t* encoder);
+void krlnc_delete_encoder(krlnc_encoder_t encoder);
 
 //------------------------------------------------------------------
 // DECODER FACTORY API
@@ -150,57 +150,57 @@ void krlnc_delete_encoder(krlnc_encoder_t* encoder);
 /// @return A new factory capable of building decoders using the
 ///         selected parameters.
 KODO_RLNC_API
-krlnc_decoder_factory_t* krlnc_new_decoder_factory(
+krlnc_decoder_factory_t krlnc_new_decoder_factory(
     int32_t finite_field_id, uint32_t symbols, uint32_t symbol_size);
 
 /// Deallocate and release the memory consumed by a factory
 /// @param factory The factory which should be deallocated
 KODO_RLNC_API
-void krlnc_delete_decoder_factory(krlnc_decoder_factory_t* factory);
+void krlnc_delete_decoder_factory(krlnc_decoder_factory_t factory);
 
 /// Return the number of symbols in a block
 /// @param factory The factory to query
 /// @return the number of symbols in a block
 KODO_RLNC_API
-uint32_t krlnc_decoder_factory_symbols(krlnc_decoder_factory_t* factory);
+uint32_t krlnc_decoder_factory_symbols(krlnc_decoder_factory_t factory);
 
 /// Return the symbol size in bytes
 /// @param factory The factory to query
 /// @return the symbol size in bytes
 KODO_RLNC_API
-uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t* factory);
+uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t factory);
 
 /// Set the number of symbols
 /// @param factory The factory which should be configured
 /// @param symbols the number of symbols
 KODO_RLNC_API
 void krlnc_decoder_factory_set_symbols(
-    krlnc_decoder_factory_t* factory,uint32_t symbols);
+    krlnc_decoder_factory_t factory,uint32_t symbols);
 
 /// Set the symbol size
 /// @param factory The factory which should be configured
 /// @param symbol_size the symbol size in bytes
 KODO_RLNC_API
 void krlnc_decoder_factory_set_symbol_size(
-    krlnc_decoder_factory_t* factory, uint32_t symbol_size);
+    krlnc_decoder_factory_t factory, uint32_t symbol_size);
 
 /// Set the coding vector format
 /// @param factory The factory which should be configured
 /// @param format_id The selected coding vector format
 KODO_RLNC_API
 void krlnc_decoder_factory_set_coding_vector_format(
-    krlnc_decoder_factory_t* factory, int32_t format_id);
+    krlnc_decoder_factory_t factory, int32_t format_id);
 
 /// Build the actual decoder
 /// @param factory The decoder factory which should be used to build the decoder
 /// @return pointer to an instantiation of an decoder
 KODO_RLNC_API
-krlnc_decoder_t* krlnc_decoder_factory_build(krlnc_decoder_factory_t* factory);
+krlnc_decoder_t krlnc_decoder_factory_build(krlnc_decoder_factory_t factory);
 
 /// Deallocate and release the memory consumed by an decoder
 /// @param decoder The decoder which should be deallocated
 KODO_RLNC_API
-void krlnc_delete_decoder(krlnc_decoder_t* decoder);
+void krlnc_delete_decoder(krlnc_decoder_t decoder);
 
 //------------------------------------------------------------------
 // PAYLOAD API DECODER
@@ -211,7 +211,7 @@ void krlnc_delete_decoder(krlnc_decoder_t* decoder);
 /// @param decoder The decoder to query.
 /// @return The payload size in bytes
 KODO_RLNC_API
-uint32_t krlnc_decoder_payload_size(krlnc_decoder_t* decoder);
+uint32_t krlnc_decoder_payload_size(krlnc_decoder_t decoder);
 
 /// Read symbol from the given payload buffer.
 /// @param decoder The decoder to use.
@@ -220,7 +220,7 @@ uint32_t krlnc_decoder_payload_size(krlnc_decoder_t* decoder);
 ///        so it cannot be reused. If the payload is needed at several places,
 ///        make sure to keep a copy of the original payload.
 KODO_RLNC_API
-void krlnc_decoder_read_payload(krlnc_decoder_t* decoder, uint8_t* payload);
+void krlnc_decoder_read_payload(krlnc_decoder_t decoder, uint8_t* payload);
 
 /// Write a recoded symbol into the provided payload buffer.
 /// @param decoder The decoder to use.
@@ -228,7 +228,7 @@ void krlnc_decoder_read_payload(krlnc_decoder_t* decoder, uint8_t* payload);
 /// @return The total bytes used from the payload buffer
 KODO_RLNC_API
 uint32_t krlnc_decoder_write_payload(
-    krlnc_decoder_t* decoder, uint8_t* payload);
+    krlnc_decoder_t decoder, uint8_t* payload);
 
 //------------------------------------------------------------------
 // PAYLOAD API ENCODER
@@ -239,7 +239,7 @@ uint32_t krlnc_decoder_write_payload(
 /// @param encoder The encoder to query.
 /// @return The payload size in bytes
 KODO_RLNC_API
-uint32_t krlnc_encoder_payload_size(krlnc_encoder_t* encoder);
+uint32_t krlnc_encoder_payload_size(krlnc_encoder_t encoder);
 
 /// Write a symbol into the provided payload buffer.
 /// @param encoder The encoder to use.
@@ -247,7 +247,7 @@ uint32_t krlnc_encoder_payload_size(krlnc_encoder_t* encoder);
 /// @return The total bytes used from the payload buffer
 KODO_RLNC_API
 uint32_t krlnc_encoder_write_payload(
-    krlnc_encoder_t* encoder, uint8_t* payload);
+    krlnc_encoder_t encoder, uint8_t* payload);
 
 //------------------------------------------------------------------
 // SYMBOL STORAGE API DECODER
@@ -258,19 +258,19 @@ uint32_t krlnc_encoder_write_payload(
 /// @return The block size, i.e. the total size in bytes that this decoder
 ///         operates on.
 KODO_RLNC_API
-uint32_t krlnc_decoder_block_size(krlnc_decoder_t* decoder);
+uint32_t krlnc_decoder_block_size(krlnc_decoder_t decoder);
 
 /// Return the symbol size of the decoder.
 /// @param decoder The decoder to check
 /// @return The size of a symbol in bytes
 KODO_RLNC_API
-uint32_t krlnc_decoder_symbol_size(krlnc_decoder_t* decoder);
+uint32_t krlnc_decoder_symbol_size(krlnc_decoder_t decoder);
 
 /// Return the number of symbols in a block (i.e. the generation size).
 /// @param decoder The decoder to check
 /// @return The number of symbols
 KODO_RLNC_API
-uint32_t krlnc_decoder_symbols(krlnc_decoder_t* decoder);
+uint32_t krlnc_decoder_symbols(krlnc_decoder_t decoder);
 
 /// Specify the data buffer where the decoder should store the decoded
 /// symbols.
@@ -280,7 +280,7 @@ uint32_t krlnc_decoder_symbols(krlnc_decoder_t* decoder);
 /// @param size The size of the buffer to be decoded
 KODO_RLNC_API
 void krlnc_decoder_set_mutable_symbols(
-    krlnc_decoder_t* decoder, uint8_t* data, uint32_t size);
+    krlnc_decoder_t decoder, uint8_t* data, uint32_t size);
 
 //------------------------------------------------------------------
 // SYMBOL STORAGE API ENCODER
@@ -291,19 +291,19 @@ void krlnc_decoder_set_mutable_symbols(
 /// @return The block size, i.e. the total size in bytes that this encoder
 ///         operates on.
 KODO_RLNC_API
-uint32_t krlnc_encoder_block_size(krlnc_encoder_t* encoder);
+uint32_t krlnc_encoder_block_size(krlnc_encoder_t encoder);
 
 /// Return the symbol size of the encoder.
 /// @param encoder The encoder to check
 /// @return The size of a symbol in bytes
 KODO_RLNC_API
-uint32_t krlnc_encoder_symbol_size(krlnc_encoder_t* encoder);
+uint32_t krlnc_encoder_symbol_size(krlnc_encoder_t encoder);
 
 /// Return the number of symbols in a block (i.e. the generation size).
 /// @param encoder The encoder to check
 /// @return The number of symbols
 KODO_RLNC_API
-uint32_t krlnc_encoder_symbols(krlnc_encoder_t* encoder);
+uint32_t krlnc_encoder_symbols(krlnc_encoder_t encoder);
 
 /// Specify the source data for all symbols. This will specify all
 /// symbols.
@@ -312,7 +312,7 @@ uint32_t krlnc_encoder_symbols(krlnc_encoder_t* encoder);
 /// @param size The size of the buffer to be encoded
 KODO_RLNC_API
 void krlnc_encoder_set_const_symbols(
-    krlnc_encoder_t* encoder, uint8_t* data, uint32_t size);
+    krlnc_encoder_t encoder, uint8_t* data, uint32_t size);
 
 //------------------------------------------------------------------
 // DECODER API
@@ -322,35 +322,42 @@ void krlnc_encoder_set_const_symbols(
 /// @param decoder The decoder to query
 /// @return Non-zero value if the decoding is complete, otherwise 0
 KODO_RLNC_API
-uint8_t krlnc_decoder_is_complete(krlnc_decoder_t* decoder);
+uint8_t krlnc_decoder_is_complete(krlnc_decoder_t decoder);
 
-/// Return the rank of a decoder indicates how many symbols have been decoded
-/// or partially decoded.
+/// Return the rank of a decoder that indicates how many symbols are
+/// decoded or partially decoded.
 /// @param decoder The decoder to query
 /// @return The rank of the decoder
 KODO_RLNC_API
-uint32_t krlnc_decoder_rank(krlnc_decoder_t* decoder);
+uint32_t krlnc_decoder_rank(krlnc_decoder_t decoder);
 
 //------------------------------------------------------------------
 // ENCODER API
 //------------------------------------------------------------------
+
+/// Return the rank of an encoder that indicates how many symbols
+/// are available for encoding.
+/// @param encoder The encoder to query
+/// @return The rank of the encoder
+KODO_RLNC_API
+uint32_t krlnc_encoder_rank(krlnc_encoder_t encoder);
 
 /// Return whether the encoder is in the systematic mode, i.e. if it will
 /// initially send the original source symbols with a simple header.
 /// @param encoder The encoder
 /// @return Non-zero if the encoder is in the systematic mode, otherwise 0
 KODO_RLNC_API
-uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t* encoder);
+uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t encoder);
 
 /// Switch the systematic encoding on
 /// @param encoder The encoder
 KODO_RLNC_API
-void krlnc_encoder_set_systematic_on(krlnc_encoder_t* encoder);
+void krlnc_encoder_set_systematic_on(krlnc_encoder_t encoder);
 
 /// Switch the systematic encoding off
 /// @param encoder The encoder
 KODO_RLNC_API
-void krlnc_encoder_set_systematic_off(krlnc_encoder_t* encoder);
+void krlnc_encoder_set_systematic_off(krlnc_encoder_t encoder);
 
 #ifdef __cplusplus
 }

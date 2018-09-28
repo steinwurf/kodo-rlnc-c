@@ -80,32 +80,32 @@ kodo_rlnc::coding_vector_format c_format_to_krlnc_format(int32_t c_format)
 // ENCODER FACTORY API
 //------------------------------------------------------------------
 
-krlnc_encoder_factory_t* krlnc_new_encoder_factory(
+krlnc_encoder_factory_t krlnc_new_encoder_factory(
     int32_t finite_field_id, uint32_t symbols, uint32_t symbol_size)
 {
     auto finite_field = c_field_to_krlnc_field(finite_field_id);
     return new krlnc_encoder_factory(finite_field, symbols, symbol_size);
 }
 
-void krlnc_delete_encoder_factory(krlnc_encoder_factory_t* factory)
+void krlnc_delete_encoder_factory(krlnc_encoder_factory_t factory)
 {
     assert(factory != nullptr);
     delete factory;
 }
 
-uint32_t krlnc_encoder_factory_symbols(krlnc_encoder_factory_t* factory)
+uint32_t krlnc_encoder_factory_symbols(krlnc_encoder_factory_t factory)
 {
     assert(factory != nullptr);
     return factory->m_impl.symbols();
 }
 
-uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t* factory)
+uint32_t krlnc_encoder_factory_symbol_size(krlnc_encoder_factory_t factory)
 {
     assert(factory != nullptr);
     return factory->m_impl.symbol_size();
 }
 
-void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory,
+void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t factory,
                                        uint32_t symbols)
 {
     assert(factory != nullptr);
@@ -113,20 +113,20 @@ void krlnc_encoder_factory_set_symbols(krlnc_encoder_factory_t* factory,
 }
 
 void krlnc_encoder_factory_set_symbol_size(
-    krlnc_encoder_factory_t* factory, uint32_t symbol_size)
+    krlnc_encoder_factory_t factory, uint32_t symbol_size)
 {
     assert(factory != nullptr);
     factory->m_impl.set_symbol_size(symbol_size);
 }
 
 void krlnc_encoder_factory_set_coding_vector_format(
-    krlnc_encoder_factory_t* factory, int32_t format_id)
+    krlnc_encoder_factory_t factory, int32_t format_id)
 {
     auto format = c_format_to_krlnc_format(format_id);
     factory->m_impl.set_coding_vector_format(format);
 }
 
-krlnc_encoder_t* krlnc_encoder_factory_build(krlnc_encoder_factory_t* factory)
+krlnc_encoder_t krlnc_encoder_factory_build(krlnc_encoder_factory_t factory)
 {
     assert(factory != nullptr);
     auto encoder = new krlnc_encoder();
@@ -134,7 +134,7 @@ krlnc_encoder_t* krlnc_encoder_factory_build(krlnc_encoder_factory_t* factory)
     return encoder;
 }
 
-void krlnc_delete_encoder(krlnc_encoder_t* encoder)
+void krlnc_delete_encoder(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     delete encoder;
@@ -144,32 +144,32 @@ void krlnc_delete_encoder(krlnc_encoder_t* encoder)
 // DECODER FACTORY API
 //------------------------------------------------------------------
 
-krlnc_decoder_factory_t* krlnc_new_decoder_factory(
+krlnc_decoder_factory_t krlnc_new_decoder_factory(
     int32_t finite_field_id, uint32_t symbols, uint32_t symbol_size)
 {
     auto finite_field = c_field_to_krlnc_field(finite_field_id);
     return new krlnc_decoder_factory(finite_field, symbols, symbol_size);
 }
 
-void krlnc_delete_decoder_factory(krlnc_decoder_factory_t* factory)
+void krlnc_delete_decoder_factory(krlnc_decoder_factory_t factory)
 {
     assert(factory != nullptr);
     delete factory;
 }
 
-uint32_t krlnc_decoder_factory_symbols(krlnc_decoder_factory_t* factory)
+uint32_t krlnc_decoder_factory_symbols(krlnc_decoder_factory_t factory)
 {
     assert(factory != nullptr);
     return factory->m_impl.symbols();
 }
 
-uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t* factory)
+uint32_t krlnc_decoder_factory_symbol_size(krlnc_decoder_factory_t factory)
 {
     assert(factory != nullptr);
     return factory->m_impl.symbol_size();
 }
 
-void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory,
+void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t factory,
                                        uint32_t symbols)
 {
     assert(factory != nullptr);
@@ -177,20 +177,20 @@ void krlnc_decoder_factory_set_symbols(krlnc_decoder_factory_t* factory,
 }
 
 void krlnc_decoder_factory_set_symbol_size(
-    krlnc_decoder_factory_t* factory, uint32_t symbol_size)
+    krlnc_decoder_factory_t factory, uint32_t symbol_size)
 {
     assert(factory != nullptr);
     factory->m_impl.set_symbol_size(symbol_size);
 }
 
 void krlnc_decoder_factory_set_coding_vector_format(
-    krlnc_decoder_factory_t* factory, int32_t format_id)
+    krlnc_decoder_factory_t factory, int32_t format_id)
 {
     auto format = c_format_to_krlnc_format(format_id);
     factory->m_impl.set_coding_vector_format(format);
 }
 
-krlnc_decoder_t* krlnc_decoder_factory_build(krlnc_decoder_factory_t* factory)
+krlnc_decoder_t krlnc_decoder_factory_build(krlnc_decoder_factory_t factory)
 {
     assert(factory != nullptr);
     auto decoder = new krlnc_decoder();
@@ -198,7 +198,7 @@ krlnc_decoder_t* krlnc_decoder_factory_build(krlnc_decoder_factory_t* factory)
     return decoder;
 }
 
-void krlnc_delete_decoder(krlnc_decoder_t* decoder)
+void krlnc_delete_decoder(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     delete decoder;
@@ -208,19 +208,19 @@ void krlnc_delete_decoder(krlnc_decoder_t* decoder)
 // PAYLOAD API DECODER
 //------------------------------------------------------------------
 
-uint32_t krlnc_decoder_payload_size(krlnc_decoder_t* decoder)
+uint32_t krlnc_decoder_payload_size(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->payload_size();
 }
 
-void krlnc_decoder_read_payload(krlnc_decoder_t* decoder, uint8_t* payload)
+void krlnc_decoder_read_payload(krlnc_decoder_t decoder, uint8_t* payload)
 {
     assert(decoder != nullptr);
     decoder->m_impl->read_payload(payload);
 }
 
-uint32_t krlnc_decoder_write_payload(krlnc_decoder_t* decoder, uint8_t* payload)
+uint32_t krlnc_decoder_write_payload(krlnc_decoder_t decoder, uint8_t* payload)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->write_payload(payload);
@@ -230,13 +230,13 @@ uint32_t krlnc_decoder_write_payload(krlnc_decoder_t* decoder, uint8_t* payload)
 // PAYLOAD API ENCODER
 //------------------------------------------------------------------
 
-uint32_t krlnc_encoder_payload_size(krlnc_encoder_t* encoder)
+uint32_t krlnc_encoder_payload_size(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->payload_size();
 }
 
-uint32_t krlnc_encoder_write_payload(krlnc_encoder_t* encoder, uint8_t* payload)
+uint32_t krlnc_encoder_write_payload(krlnc_encoder_t encoder, uint8_t* payload)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->write_payload(payload);
@@ -246,26 +246,26 @@ uint32_t krlnc_encoder_write_payload(krlnc_encoder_t* encoder, uint8_t* payload)
 // SYMBOL STORAGE API DECODER
 //------------------------------------------------------------------
 
-uint32_t krlnc_decoder_block_size(krlnc_decoder_t* decoder)
+uint32_t krlnc_decoder_block_size(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->block_size();
 }
 
-uint32_t krlnc_decoder_symbol_size(krlnc_decoder_t* decoder)
+uint32_t krlnc_decoder_symbol_size(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->symbol_size();
 }
 
-uint32_t krlnc_decoder_symbols(krlnc_decoder_t* decoder)
+uint32_t krlnc_decoder_symbols(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->symbols();
 }
 
 void krlnc_decoder_set_mutable_symbols(
-    krlnc_decoder_t* decoder, uint8_t* data, uint32_t size)
+    krlnc_decoder_t decoder, uint8_t* data, uint32_t size)
 {
     assert(decoder != nullptr);
     decoder->m_impl->set_mutable_symbols(storage::storage(data, size));
@@ -275,26 +275,26 @@ void krlnc_decoder_set_mutable_symbols(
 // SYMBOL STORAGE API ENCODER
 //------------------------------------------------------------------
 
-uint32_t krlnc_encoder_block_size(krlnc_encoder_t* encoder)
+uint32_t krlnc_encoder_block_size(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->block_size();
 }
 
-uint32_t krlnc_encoder_symbol_size(krlnc_encoder_t* encoder)
+uint32_t krlnc_encoder_symbol_size(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->symbol_size();
 }
 
-uint32_t krlnc_encoder_symbols(krlnc_encoder_t* encoder)
+uint32_t krlnc_encoder_symbols(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->symbols();
 }
 
 void krlnc_encoder_set_const_symbols(
-    krlnc_encoder_t* encoder, uint8_t* data, uint32_t size)
+    krlnc_encoder_t encoder, uint8_t* data, uint32_t size)
 {
     assert(encoder != nullptr);
     encoder->m_impl->set_const_symbols(storage::storage(data, size));
@@ -304,13 +304,13 @@ void krlnc_encoder_set_const_symbols(
 // DECODER API
 //------------------------------------------------------------------
 
-uint8_t krlnc_decoder_is_complete(krlnc_decoder_t* decoder)
+uint8_t krlnc_decoder_is_complete(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->is_complete();
 }
 
-uint32_t krlnc_decoder_rank(krlnc_decoder_t* decoder)
+uint32_t krlnc_decoder_rank(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->rank();
@@ -320,18 +320,24 @@ uint32_t krlnc_decoder_rank(krlnc_decoder_t* decoder)
 // ENCODER API
 //------------------------------------------------------------------
 
-uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t* encoder)
+uint32_t krlnc_encoder_rank(krlnc_encoder_t encoder)
+{
+    assert(encoder != nullptr);
+    return encoder->m_impl->rank();
+}
+
+uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl->is_systematic_on();
 }
 
-void krlnc_encoder_set_systematic_on(krlnc_encoder_t* encoder)
+void krlnc_encoder_set_systematic_on(krlnc_encoder_t encoder)
 {
     encoder->m_impl->set_systematic_on();
 }
 
-void krlnc_encoder_set_systematic_off(krlnc_encoder_t* encoder)
+void krlnc_encoder_set_systematic_off(krlnc_encoder_t encoder)
 {
     encoder->m_impl->set_systematic_off();
 }

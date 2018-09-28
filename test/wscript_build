@@ -7,14 +7,14 @@ search_path = []
 if not bld.is_mkspec_platform('windows'):
     search_path = ['.']
 
-# First, we test with the kodo-c static library (to make debugging easier)
+# First, we test with the static library (to make debugging easier)
 bld.program(
     features='cxx test limit_includes',
     source=['kodo_rlnc_c_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
     target='kodo_rlnc_c_static_tests',
     use=['kodo_rlnc_c_static', 'gtest'])
 
-# Second, We test with the kodo-c shared library (which won't work on
+# Second, We test with the shared library (which won't work on
 # Android and iOS)
 if bld.get_mkspec_platform() not in ['android', 'ios']:
 

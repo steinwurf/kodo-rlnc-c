@@ -7,6 +7,9 @@ of every change, see the Git log.
 Latest
 ------
 * tbd
+* Minor: Added some examples.
+* Major: Changed the opaque pointer types to allow the compilation of pure
+  C programs.
 
 3.0.0
 -----

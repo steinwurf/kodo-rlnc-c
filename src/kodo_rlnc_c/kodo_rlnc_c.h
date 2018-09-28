@@ -272,6 +272,15 @@ uint32_t krlnc_decoder_symbol_size(krlnc_decoder_t decoder);
 KODO_RLNC_API
 uint32_t krlnc_decoder_symbols(krlnc_decoder_t decoder);
 
+/// Specifies the data buffer where the decoder should store a given symbol.
+/// @param decoder The decoder which will decode the symbol
+/// @param index The index of the symbol in the coding block
+/// @param data The buffer that should contain the decoded symbol
+/// @param size The size of the symbol buffer
+KODO_RLNC_API
+void krlnc_decoder_set_mutable_symbol(
+    krlnc_decoder_t decoder, uint32_t index, uint8_t* data, uint32_t size);
+
 /// Specify the data buffer where the decoder should store the decoded
 /// symbols.
 /// This will specify the storage for all symbols.
@@ -305,6 +314,15 @@ uint32_t krlnc_encoder_symbol_size(krlnc_encoder_t encoder);
 KODO_RLNC_API
 uint32_t krlnc_encoder_symbols(krlnc_encoder_t encoder);
 
+/// Specifies the source data for a given symbol.
+/// @param encoder The encoder which will encode the symbol
+/// @param index The index of the symbol in the coding block
+/// @param data The buffer containing the data to be encoded
+/// @param size The size of the symbol buffer
+KODO_RLNC_API
+void krlnc_encoder_set_const_symbol(
+    krlnc_encoder_t encoder, uint32_t index, uint8_t* data, uint32_t size);
+
 /// Specify the source data for all symbols. This will specify all
 /// symbols.
 /// @param encoder The encoder which will encode the data
@@ -324,12 +342,72 @@ void krlnc_encoder_set_const_symbols(
 KODO_RLNC_API
 uint8_t krlnc_decoder_is_complete(krlnc_decoder_t decoder);
 
+/// Check whether decoding is partially complete. This means that some
+/// symbols in the decoder are fully decoded. You can use the
+/// krlnc_decoder_is_symbol_uncoded() function to determine which symbols.
+/// @param decoder The decoder to query
+/// @return Non-zero value if the decoding is partially complete, otherwise 0
+KODO_RLNC_API
+uint8_t krlnc_decoder_is_partially_complete(krlnc_decoder_t decoder);
+
 /// Return the rank of a decoder that indicates how many symbols are
 /// decoded or partially decoded.
 /// @param decoder The decoder to query
 /// @return The rank of the decoder
 KODO_RLNC_API
 uint32_t krlnc_decoder_rank(krlnc_decoder_t decoder);
+
+/// Returns the number of missing symbols.
+/// @param decoder The decoder to query
+/// @return The number of missing symbols at the decoder
+KODO_RLNC_API
+uint32_t krlnc_decoder_symbols_missing(krlnc_decoder_t decoder);
+
+/// Returns the number of partially decoded symbols.
+/// @param decoder The decoder to query
+/// @return The number of partially decoded symbols at the decoder
+KODO_RLNC_API
+uint32_t krlnc_decoder_symbols_partially_decoded(krlnc_decoder_t decoder);
+
+/// Returns the number of uncoded (i.e. fully decoded) symbols.
+/// @param decoder The decoder to query
+/// @return The number of uncoded symbols at the decoder
+KODO_RLNC_API
+uint32_t krlnc_decoder_symbols_uncoded(krlnc_decoder_t decoder);
+
+/// Indicates whether a symbol is missing at a decoder.
+/// @param decoder The decoder to query
+/// @param index Index of the symbol whose state should be checked
+/// @return Non-zero value if the symbol is missing, otherwise 0
+KODO_RLNC_API
+uint8_t krlnc_decoder_is_symbol_missing(
+    krlnc_decoder_t decoder, uint32_t index);
+
+/// Indicates whether a symbol has been partially decoded at a decoder.
+/// @param decoder The decoder to query
+/// @param index Index of the symbol whose state should be checked
+/// @return Non-zero value if the symbol has been partially decoded,
+///         otherwise 0
+KODO_RLNC_API
+uint8_t krlnc_decoder_is_symbol_partially_decoded(
+    krlnc_decoder_t decoder, uint32_t index);
+
+/// Indicates whether a symbol is available in an uncoded (i.e. fully decoded)
+/// form at the decoder.
+/// @param decoder The decoder to query
+/// @param index Index of the symbol whose state should be checked
+/// @return Non-zero value if the symbol is uncoded, otherwise 0
+KODO_RLNC_API
+uint8_t krlnc_decoder_is_symbol_uncoded(
+    krlnc_decoder_t decoder, uint32_t index);
+
+/// Indicates if a symbol is partially or fully decoded. A symbol with
+/// a pivot element is defined in the coding matrix of a decoder.
+/// @param decoder The decoder to query
+/// @param index Index of the symbol whose state should be checked
+/// @return Non-zero value if the symbol is defined, otherwise 0
+KODO_RLNC_API
+uint8_t krlnc_decoder_is_symbol_pivot(krlnc_decoder_t decoder, uint32_t index);
 
 //------------------------------------------------------------------
 // ENCODER API

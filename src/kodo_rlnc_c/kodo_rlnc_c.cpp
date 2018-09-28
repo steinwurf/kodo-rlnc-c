@@ -264,6 +264,13 @@ uint32_t krlnc_decoder_symbols(krlnc_decoder_t decoder)
     return decoder->m_impl->symbols();
 }
 
+void krlnc_decoder_set_mutable_symbol(
+    krlnc_decoder_t decoder, uint32_t index, uint8_t* data, uint32_t size)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_mutable_symbol(index, storage::storage(data, size));
+}
+
 void krlnc_decoder_set_mutable_symbols(
     krlnc_decoder_t decoder, uint8_t* data, uint32_t size)
 {
@@ -293,6 +300,13 @@ uint32_t krlnc_encoder_symbols(krlnc_encoder_t encoder)
     return encoder->m_impl->symbols();
 }
 
+void krlnc_encoder_set_const_symbol(
+    krlnc_encoder_t encoder, uint32_t index, uint8_t* data, uint32_t size)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->set_const_symbol(index, storage::storage(data, size));
+}
+
 void krlnc_encoder_set_const_symbols(
     krlnc_encoder_t encoder, uint8_t* data, uint32_t size)
 {
@@ -310,10 +324,59 @@ uint8_t krlnc_decoder_is_complete(krlnc_decoder_t decoder)
     return decoder->m_impl->is_complete();
 }
 
+uint8_t krlnc_decoder_is_partially_complete(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->is_partially_complete();
+}
+
 uint32_t krlnc_decoder_rank(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->rank();
+}
+
+uint32_t krlnc_decoder_symbols_missing(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->symbols_missing();
+}
+
+uint32_t krlnc_decoder_symbols_partially_decoded(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->symbols_partially_decoded();
+}
+
+uint32_t krlnc_decoder_symbols_uncoded(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->symbols_uncoded();
+}
+
+uint8_t krlnc_decoder_is_symbol_missing(krlnc_decoder_t decoder, uint32_t index)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->is_symbol_missing(index);
+}
+
+uint8_t krlnc_decoder_is_symbol_partially_decoded(
+    krlnc_decoder_t decoder, uint32_t index)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->is_symbol_partially_decoded(index);
+}
+
+uint8_t krlnc_decoder_is_symbol_uncoded(krlnc_decoder_t decoder, uint32_t index)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->is_symbol_uncoded(index);
+}
+
+uint8_t krlnc_decoder_is_symbol_pivot(krlnc_decoder_t decoder, uint32_t index)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->is_symbol_pivot(index);
 }
 
 //------------------------------------------------------------------

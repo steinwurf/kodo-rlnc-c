@@ -37,10 +37,12 @@ TEST(test_kodo_rlnc_c, factory_api)
     uint32_t new_symbol_size = 300;
 
     krlnc_encoder_factory_set_symbol_size(encoder_factory, new_symbol_size);
-    EXPECT_EQ(new_symbol_size, krlnc_encoder_factory_symbol_size(encoder_factory));
+    EXPECT_EQ(
+        new_symbol_size, krlnc_encoder_factory_symbol_size(encoder_factory));
 
     krlnc_decoder_factory_set_symbol_size(decoder_factory, new_symbol_size);
-    EXPECT_EQ(new_symbol_size, krlnc_decoder_factory_symbol_size(decoder_factory));
+    EXPECT_EQ(
+        new_symbol_size, krlnc_decoder_factory_symbol_size(decoder_factory));
 
     krlnc_encoder_factory_set_coding_vector_format(
         encoder_factory, krlnc_sparse_seed);
@@ -84,8 +86,16 @@ TEST(test_kodo_rlnc_c, api)
 
     std::vector<uint8_t> data_in(krlnc_encoder_block_size(encoder));
     std::generate(data_in.begin(), data_in.end(), rand);
+
+    EXPECT_EQ(0U, krlnc_encoder_rank(encoder));
     krlnc_encoder_set_const_symbols(
         encoder, data_in.data(), data_in.size());
+    EXPECT_EQ(symbols, krlnc_encoder_rank(encoder));
+
+    krlnc_encoder_set_systematic_on(encoder);
+    EXPECT_TRUE(krlnc_encoder_is_systematic_on(encoder));
+    krlnc_encoder_set_systematic_off(encoder);
+    EXPECT_FALSE(krlnc_encoder_is_systematic_on(encoder));
 
     std::vector<uint8_t> data_out1(krlnc_decoder_block_size(decoder1));
     krlnc_decoder_set_mutable_symbols(
@@ -102,13 +112,21 @@ TEST(test_kodo_rlnc_c, api)
     std::vector<uint8_t> payload1(krlnc_encoder_payload_size(encoder));
     std::vector<uint8_t> payload2(krlnc_decoder_payload_size(decoder1));
 
-    krlnc_encoder_set_systematic_on(encoder);
-    EXPECT_TRUE(krlnc_encoder_is_systematic_on(encoder));
-    krlnc_encoder_set_systematic_off(encoder);
-    EXPECT_FALSE(krlnc_encoder_is_systematic_on(encoder));
-
     EXPECT_EQ(0U, krlnc_decoder_rank(decoder1));
     EXPECT_EQ(0U, krlnc_decoder_rank(decoder2));
+    EXPECT_FALSE(krlnc_decoder_is_complete(decoder1));
+    EXPECT_EQ(symbols, krlnc_decoder_symbols_missing(decoder1));
+    EXPECT_EQ(0U, krlnc_decoder_symbols_uncoded(decoder1));
+    EXPECT_EQ(0U, krlnc_decoder_symbols_partially_decoded(decoder1));
+
+    // Initially all symbols should be missing
+    for (uint32_t i = 0; i < symbols; ++i)
+    {
+        EXPECT_TRUE(krlnc_decoder_is_symbol_missing(decoder1, i));
+        EXPECT_FALSE(krlnc_decoder_is_symbol_partially_decoded(decoder1, i));
+        EXPECT_FALSE(krlnc_decoder_is_symbol_uncoded(decoder1, i));
+    }
+
     while (!krlnc_decoder_is_complete(decoder2))
     {
         krlnc_encoder_write_payload(encoder, payload1.data());

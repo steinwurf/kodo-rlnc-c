@@ -3,7 +3,8 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <kodo_rlnc_c/kodo_rlnc_c.h>
+#include <kodo_rlnc_c/encoder.h>
+#include <kodo_rlnc_c/decoder.h>
 
 #include <algorithm>
 #include <vector>

@@ -44,12 +44,14 @@ def build(bld):
         bld.recurse('test')
         bld.recurse('examples/encode_decode_on_the_fly')
         bld.recurse('examples/encode_decode_simple')
-#        bld.recurse('examples/sparse_seed')
+        bld.recurse('examples/sparse_seed')
         bld.recurse('examples/switch_systematic_on_off')
+#        bld.recurse('examples/symbol_status_updater')
 #        bld.recurse('examples/udp_sender_receiver')
-#        bld.recurse('examples/use_trace_layers')
+#        bld.recurse('examples/uncoded_symbols')
+        bld.recurse('examples/use_trace_layers')
 
-        # Install kodo_rlnc_c.h to the 'include' folder
+        # Install the header files to the 'include' folder
         if bld.has_tool_option('install_path'):
             install_path = bld.get_tool_option('install_path')
             install_path = os.path.abspath(os.path.expanduser(install_path))

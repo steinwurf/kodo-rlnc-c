@@ -1,4 +1,4 @@
-// Copyright Steinwurf ApS 2014.
+// Copyright Steinwurf ApS 2018.
 // Distributed under the "STEINWURF EVALUATION LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
@@ -9,7 +9,8 @@
 #include <string.h>
 #include <time.h>
 
-#include <kodo_rlnc_c/kodo_rlnc_c.h>
+#include <kodo_rlnc_c/encoder.h>
+#include <kodo_rlnc_c/decoder.h>
 
 /// @example encode_decode_on_the_fly.c
 ///

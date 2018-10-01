@@ -1,0 +1,7 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+bld.program(features='cxx limit_includes',
+            source='sparse_seed.c',
+            target='sparse_seed',
+            use=['kodo_rlnc_c_static'])

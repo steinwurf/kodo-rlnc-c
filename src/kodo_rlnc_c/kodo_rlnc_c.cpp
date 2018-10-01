@@ -1,9 +1,10 @@
-// Copyright Steinwurf ApS 2014.
+// Copyright Steinwurf ApS 2018.
 // Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include "kodo_rlnc_c.h"
+#include "encoder.h"
+#include "decoder.h"
 
 #include <cstring>
 #include <cstdint>
@@ -397,10 +398,100 @@ uint8_t krlnc_encoder_is_systematic_on(krlnc_encoder_t encoder)
 
 void krlnc_encoder_set_systematic_on(krlnc_encoder_t encoder)
 {
+    assert(encoder != nullptr);
     encoder->m_impl->set_systematic_on();
 }
 
 void krlnc_encoder_set_systematic_off(krlnc_encoder_t encoder)
 {
+    assert(encoder != nullptr);
     encoder->m_impl->set_systematic_off();
+}
+
+//------------------------------------------------------------------
+// COEFFICIENT GENERATOR API
+//------------------------------------------------------------------
+
+float krlnc_encoder_density(krlnc_encoder_t encoder)
+{
+    assert(encoder != nullptr);
+    return encoder->m_impl->density();
+}
+
+void krlnc_encoder_set_density(krlnc_encoder_t encoder, float density)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->set_density(density);
+}
+
+//------------------------------------------------------------------
+// TRACE API
+//------------------------------------------------------------------
+
+void krlnc_encoder_set_trace_stdout(krlnc_encoder_t encoder)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->set_trace_stdout();
+}
+
+void krlnc_encoder_set_trace_callback(
+    krlnc_encoder_t encoder, krlnc_trace_callback_t c_callback, void* context)
+{
+    assert(c_callback);
+    assert(encoder != nullptr);
+
+    auto callback = [c_callback, context](const std::string& zone,
+                                          const std::string& data)
+    {
+        c_callback(zone.c_str(), data.c_str(), context);
+    };
+    encoder->m_impl->set_trace_callback(callback);
+}
+
+void krlnc_encoder_set_trace_off(krlnc_encoder_t encoder)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->set_trace_off();
+}
+
+void krlnc_encoder_set_zone_prefix(krlnc_encoder_t encoder, const char* prefix)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->set_zone_prefix(std::string(prefix));
+}
+
+//------------------------------------------------------------------
+// TRACE API
+//------------------------------------------------------------------
+
+void krlnc_decoder_set_trace_stdout(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_trace_stdout();
+}
+
+void krlnc_decoder_set_trace_callback(
+    krlnc_decoder_t decoder, krlnc_trace_callback_t c_callback, void* context)
+{
+    assert(c_callback);
+    assert(decoder != nullptr);
+
+    auto callback = [c_callback, context](const std::string& zone,
+                                          const std::string& data)
+    {
+        c_callback(zone.c_str(), data.c_str(), context);
+    };
+    decoder->m_impl->set_trace_callback(callback);
+}
+
+void krlnc_decoder_set_trace_off(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_trace_off();
+}
+
+void krlnc_decoder_set_zone_prefix(krlnc_decoder_t decoder, const char* prefix)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_zone_prefix(std::string(prefix));
 }

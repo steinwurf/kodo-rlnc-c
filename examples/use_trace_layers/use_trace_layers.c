@@ -5,20 +5,41 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include <time.h>
 
 #include <kodo_rlnc_c/encoder.h>
 #include <kodo_rlnc_c/decoder.h>
 
-/// @example switch_systematic_on_off.c
+/// @example use_trace_layers.c
 ///
-/// This example shows how to enable or disable systematic coding for
-/// an encoder.
-/// Systematic coding is used to reduce the amount of work done by an
-/// encoder and a decoder. This is achieved by initially sending all
-/// symbols uncoded.
+/// Simple example to show the trace functionality.
+
+// Helper function to determine if a string ends with a certain suffix
+int ends_with(const char* str, const char* suffix)
+{
+    if (!str || !suffix) return 0;
+    size_t len_str = strlen(str);
+    size_t len_suffix = strlen(suffix);
+    if (len_suffix >  len_str) return 0;
+    return strncmp(str + len_str - len_suffix, suffix, len_suffix) == 0;
+}
+
+// This callback function will be called when the decoder produces trace output
+void trace_callback(const char* zone, const char* data, void* context)
+{
+    (void) context;
+    // The zone string starts with our custom prefix, so it is easier to
+    // check if the zone ends with a given suffix
+    if (ends_with(zone, "decoder_state") ||
+        ends_with(zone, "symbol_coefficients_before_read_symbol") ||
+        ends_with(zone, "symbol_index_before_read_uncoded_symbol"))
+    {
+        printf("%s:\n", zone);
+        printf("%s\n", data);
+    }
+}
 
 int main()
 {
@@ -27,13 +48,13 @@ int main()
 
     // Set the number of symbols (i.e. the generation size in RLNC
     // terminology) and the size of a symbol in bytes
-    uint8_t symbols = 10;
-    uint8_t symbol_size = 100;
+    uint32_t symbols = 3;
+    uint32_t symbol_size = 16;
 
     int32_t finite_field = krlnc_binary8;
 
-    // In the following we will make an encoder/decoder factory.
-    // The factories are used to build actual encoders/decoder
+    // First, we create an encoder & decoder factory.
+    // The factories are used to build actual encoders/decoders
     krlnc_encoder_factory_t encoder_factory = krlnc_new_encoder_factory(
         finite_field, symbols, symbol_size);
 
@@ -43,7 +64,7 @@ int main()
     krlnc_encoder_t encoder = krlnc_encoder_factory_build(encoder_factory);
     krlnc_decoder_t decoder = krlnc_decoder_factory_build(decoder_factory);
 
-    // Allocate some storage for a "payload" buffer that we would
+    // Allocate some storage for a "payload" the payload is what we would
     // eventually send over a network
     uint32_t payload_size = krlnc_encoder_payload_size(encoder);
     uint8_t* payload = (uint8_t*) malloc(payload_size);
@@ -61,47 +82,34 @@ int main()
         data_in[i] = rand() % 256;
     }
 
+    // Install the stdout trace function for the encoder (everything will
+    // be printed to stdout without filtering)
+    krlnc_encoder_set_trace_stdout(encoder);
+    // Set a custom zone prefix for the encoder (this helps to differentiate
+    // the trace output of the encoder and the decoder)
+    krlnc_encoder_set_zone_prefix(encoder, "Encoder");
+
+    // Install a custom trace function for the decoder (we can process and
+    // filter the data in our trace callback)
+    krlnc_decoder_set_trace_callback(decoder, trace_callback, NULL);
+    // Set a custom zone prefix for the decoder
+    krlnc_decoder_set_zone_prefix(decoder, "Decoder");
+
     krlnc_encoder_set_const_symbols(encoder, data_in, block_size);
 
     uint8_t* data_out = (uint8_t*) malloc(block_size);
     krlnc_decoder_set_mutable_symbols(decoder, data_out, block_size);
 
-    printf("Starting encoding / decoding\n");
     while (!krlnc_decoder_is_complete(decoder))
     {
-        // With 50% probability toggle systematic
-        if ((rand() % 2) == 0)
-        {
-            if (krlnc_encoder_is_systematic_on(encoder))
-            {
-                printf("Turning systematic OFF\n");
-                krlnc_encoder_set_systematic_off(encoder);
-            }
-            else
-            {
-                printf("Turn systematic ON\n");
-                krlnc_encoder_set_systematic_on(encoder);
-            }
-        }
-
-        // Encode a packet into the payload buffer
         krlnc_encoder_write_payload(encoder, payload);
 
         if ((rand() % 2) == 0)
         {
-            printf("Drop packet\n");
             continue;
         }
 
-        // Pass that packet to the decoder
         krlnc_decoder_read_payload(decoder, payload);
-
-        printf("Rank of decoder %d\n", krlnc_decoder_rank(decoder));
-
-        // Symbols that were received in the systematic phase correspond
-        // to the original source symbols and are therefore marked as
-        // decoded
-        printf("Symbols decoded %d\n", krlnc_decoder_symbols_uncoded(decoder));
     }
 
     if (memcmp(data_in, data_out, block_size) == 0)
@@ -114,6 +122,7 @@ int main()
     }
 
     free(data_in);
+    free(data_out);
     free(payload);
 
     krlnc_delete_encoder(encoder);

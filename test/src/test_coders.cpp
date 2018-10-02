@@ -11,7 +11,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(test_kodo_rlnc_c, factory_api)
+TEST(test_coders, factory_api)
 {
     uint32_t symbols = 50;
     uint32_t symbol_size = 750;
@@ -54,7 +54,7 @@ TEST(test_kodo_rlnc_c, factory_api)
     krlnc_delete_encoder_factory(encoder_factory);
 }
 
-TEST(test_kodo_rlnc_c, api)
+TEST(test_coders, api)
 {
     uint32_t symbols = 50;
     uint32_t symbol_size = 750;

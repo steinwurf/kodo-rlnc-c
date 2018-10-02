@@ -67,7 +67,7 @@ int main()
     // Note: the density can be adjusted at any time. This feature can be used
     // to adapt to changing network conditions.
     printf("The density defaults to: %0.2f\n", krlnc_encoder_density(encoder));
-    krlnc_encoder_set_density(encoder, 0.4);
+    krlnc_encoder_set_density(encoder, 0.4f);
     printf("The density was set to: %0.2f\n", krlnc_encoder_density(encoder));
     // A low density setting can lead to a large number of redundant symbols.
     // In practice, the value should be tuned to the specific scenario.

@@ -44,6 +44,7 @@ def build(bld):
         bld.recurse('test')
         bld.recurse('examples/encode_decode_on_the_fly')
         bld.recurse('examples/encode_decode_simple')
+        bld.recurse('examples/encode_decode_using_coefficients')
         bld.recurse('examples/sparse_seed')
         bld.recurse('examples/switch_systematic_on_off')
         bld.recurse('examples/symbol_status_updater')

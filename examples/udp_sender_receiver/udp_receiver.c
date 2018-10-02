@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 
     // Create the encoder factory
     decoder_factory = krlnc_new_decoder_factory(
-         finite_field, symbols, symbol_size);
+        finite_field, symbols, symbol_size);
     decoder = krlnc_decoder_factory_build(decoder_factory);
 
     // Create the buffer needed for the payload

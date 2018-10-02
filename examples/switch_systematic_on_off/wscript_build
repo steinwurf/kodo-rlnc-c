@@ -1,0 +1,7 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+bld.program(features='cxx limit_includes',
+            source='switch_systematic_on_off.c',
+            target='switch_systematic_on_off',
+            use=['kodo_rlnc_c_static'])

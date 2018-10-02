@@ -7,6 +7,11 @@ of every change, see the Git log.
 Latest
 ------
 * tbd
+* Minor: Added some examples.
+* Major: Separated the kodo_rlnc_c.h header file to encoder.h and decoder.h
+  in order to mirror the kodo-rlnc headers.
+* Major: Changed the opaque pointer types to allow the compilation of pure
+  C programs.
 
 3.0.0
 -----

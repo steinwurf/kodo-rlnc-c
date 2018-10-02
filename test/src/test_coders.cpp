@@ -112,6 +112,7 @@ TEST(test_coders, basic_api)
 
     krlnc_encoder_set_systematic_on(encoder);
     EXPECT_TRUE(krlnc_encoder_is_systematic_on(encoder));
+    EXPECT_TRUE(krlnc_encoder_in_systematic_phase(encoder));
     krlnc_encoder_set_systematic_off(encoder);
     EXPECT_FALSE(krlnc_encoder_is_systematic_on(encoder));
 
@@ -216,6 +217,7 @@ TEST(test_coders, symbol_status_api)
     EXPECT_EQ(1U, krlnc_decoder_symbols_uncoded(decoder));
 
     krlnc_decoder_set_status_updater_on(decoder);
+    EXPECT_TRUE(krlnc_decoder_is_status_updater_enabled(decoder));
 
     coefficients = {0, 1, 0, 0};
     krlnc_decoder_read_symbol(decoder, symbol.data(), coefficients.data());
@@ -223,6 +225,11 @@ TEST(test_coders, symbol_status_api)
     EXPECT_EQ(2U, krlnc_decoder_symbols_uncoded(decoder));
 
     krlnc_decoder_set_status_updater_off(decoder);
+    EXPECT_FALSE(krlnc_decoder_is_status_updater_enabled(decoder));
+
+    krlnc_decoder_read_uncoded_symbol(decoder, symbol.data(), 2);
+
+    EXPECT_EQ(3U, krlnc_decoder_symbols_uncoded(decoder));
 
     krlnc_delete_decoder(decoder);
     krlnc_delete_decoder_factory(decoder_factory);

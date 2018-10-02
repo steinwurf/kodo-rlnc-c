@@ -187,11 +187,62 @@ uint8_t krlnc_encoder_in_systematic_phase(krlnc_encoder_t encoder);
 // SYMBOL API
 //------------------------------------------------------------------
 
+/// Returns the size of the coefficient vector.
+/// @param encoder The encoder to check
+/// @return The size of the coefficient vector in bytes
+KODO_RLNC_API
+uint32_t krlnc_encoder_coefficient_vector_size(krlnc_encoder_t encoder);
+
+/// Writes an encoded symbol according to the provided symbol coefficients.
+/// @param encoder The encoder to use.
+/// @param symbol_data The destination buffer for the encoded symbol
+/// @param coefficients The desired coding coefficients that should
+///        be used to calculate the encoded symbol.
+/// @return The number of bytes used.
+KODO_RLNC_API
+uint32_t krlnc_encoder_write_symbol(
+    krlnc_encoder_t encoder, uint8_t* symbol_data, uint8_t* coefficients);
+
+/// Writes a systematic/uncoded symbol that corresponds to the provided
+/// symbol index.
+/// @param encoder The encoder to use.
+/// @param symbol_data The destination of the uncoded source symbol.
+/// @param index The index of this uncoded symbol in the data block.
+/// @return The number of bytes used.
+KODO_RLNC_API
+uint32_t krlnc_encoder_write_uncoded_symbol(
+    krlnc_encoder_t encoder, uint8_t* symbol_data, uint32_t index);
 
 //------------------------------------------------------------------
 // COEFFICIENT GENERATOR API
 //------------------------------------------------------------------
 
+/// Set the seed of the coefficient generator.
+/// @param encoder The encoder to use
+/// @param seed_value The seed value for the generator.
+KODO_RLNC_API
+void krlnc_encoder_set_seed(krlnc_encoder_t encoder, uint32_t seed_value);
+
+/// Fills the input buffer with symbol coefficients used for either
+/// encoding or decoding a symbol.
+/// @param encoder The encoder to use.
+/// @param coefficients Pointer to the memory where the coefficients should
+///        be stored. The coefficient buffer should have at least
+///        krlnc_encoder_coefficient_vector_size() capacity.
+KODO_RLNC_API
+void krlnc_encoder_generate(krlnc_encoder_t encoder, uint8_t* coefficients);
+
+/// Generate a "partial" coding vector that will only contain non-zero
+/// coefficients for the symbols that are currently defined.
+/// This allows encoding before defining all original source symbols,
+/// i.e. on-the-fly encoding.
+/// @param encoder The encoder to use.
+/// @param coefficients Pointer to the memory where the coefficients should
+///        be stored. The coefficient buffer should have at least
+///        krlnc_encoder_coefficient_vector_size() capacity.
+KODO_RLNC_API
+void krlnc_encoder_generate_partial(
+    krlnc_encoder_t encoder, uint8_t* coefficients);
 
 /// Returns the density of the generated coding vector coefficients.
 /// @param coder The encoder to query

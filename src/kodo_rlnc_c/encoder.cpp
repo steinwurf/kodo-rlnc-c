@@ -181,8 +181,51 @@ uint8_t krlnc_encoder_in_systematic_phase(krlnc_encoder_t encoder)
 }
 
 //------------------------------------------------------------------
+// SYMBOL API
+//------------------------------------------------------------------
+
+uint32_t krlnc_encoder_coefficient_vector_size(krlnc_encoder_t encoder)
+{
+    assert(encoder != nullptr);
+    return encoder->m_impl->coefficient_vector_size();
+}
+
+uint32_t krlnc_encoder_write_symbol(
+    krlnc_encoder_t encoder, uint8_t* symbol_data, uint8_t* coefficients)
+{
+    assert(encoder != nullptr);
+    return encoder->m_impl->write_symbol(symbol_data, coefficients);
+}
+
+uint32_t krlnc_encoder_write_uncoded_symbol(
+    krlnc_encoder_t encoder, uint8_t* symbol_data, uint32_t index)
+{
+    assert(encoder != nullptr);
+    return encoder->m_impl->write_uncoded_symbol(symbol_data, index);
+}
+
+//------------------------------------------------------------------
 // COEFFICIENT GENERATOR API
 //------------------------------------------------------------------
+
+void krlnc_encoder_set_seed(krlnc_encoder_t encoder, uint32_t seed_value)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->set_seed(seed_value);
+}
+
+void krlnc_encoder_generate(krlnc_encoder_t encoder, uint8_t* coefficients)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->generate(coefficients);
+}
+
+void krlnc_encoder_generate_partial(
+    krlnc_encoder_t encoder, uint8_t* coefficients)
+{
+    assert(encoder != nullptr);
+    encoder->m_impl->generate_partial(coefficients);
+}
 
 float krlnc_encoder_density(krlnc_encoder_t encoder)
 {

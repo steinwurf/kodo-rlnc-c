@@ -1,4 +1,4 @@
-// Copyright Steinwurf ApS 2015.
+// Copyright Steinwurf ApS 2018.
 // Distributed under the "STEINWURF EVALUATION LICENSE 1.0".
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing

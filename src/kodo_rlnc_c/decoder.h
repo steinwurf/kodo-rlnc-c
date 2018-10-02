@@ -158,8 +158,6 @@ KODO_RLNC_API
 uint32_t krlnc_decoder_write_payload(
     krlnc_decoder_t decoder, uint8_t* payload);
 
-
-
 //------------------------------------------------------------------
 // DECODER API
 //------------------------------------------------------------------
@@ -237,15 +235,92 @@ uint8_t krlnc_decoder_is_symbol_uncoded(
 KODO_RLNC_API
 uint8_t krlnc_decoder_is_symbol_pivot(krlnc_decoder_t decoder, uint32_t index);
 
+/// Returns whether the symbol status updater is enabled or not.
+/// The status updater can be used to accurately track the status of each
+/// symbol during the decoding process (this can impact the performance).
+/// The default state is OFF.
+/// @param decoder The decoder to query
+/// @return Non-zero value if the symbol status updater is enabled, otherwise 0
+KODO_RLNC_API
+uint8_t krlnc_decoder_is_status_updater_enabled(krlnc_decoder_t decoder);
+
+/// Enable the status updater so that a full update is performed every
+/// time a symbol is read.
+/// @param decoder The decoder to modify
+KODO_RLNC_API
+void krlnc_decoder_set_status_updater_on(krlnc_decoder_t decoder);
+
+/// Disables the status updater.
+/// @param decoder The decoder to modify
+KODO_RLNC_API
+void krlnc_decoder_set_status_updater_off(krlnc_decoder_t decoder);
+
+/// Force a manual update on the symbol status so that all symbols that are
+/// currently considered partially decoded will labelled as uncoded if their
+/// coding vector only has a single non-zero coefficient (which is 1).
+/// @param decoder The decoder to update
+KODO_RLNC_API
+void krlnc_decoder_update_symbol_status(krlnc_decoder_t decoder);
+
 //------------------------------------------------------------------
 // SYMBOL API
 //------------------------------------------------------------------
 
+/// Returns the size of the coefficient vector.
+/// @param decoder The decoder to check
+/// @return The size of the coefficient vector in bytes
+KODO_RLNC_API
+uint32_t krlnc_decoder_coefficient_vector_size(krlnc_decoder_t decoder);
+
+/// Reads and decodes an encoded symbol according to the provided coding
+/// coefficients.
+/// @param decoder The decoder to use.
+/// @param symbol_data The encoded symbol
+/// @param coefficients The coding coefficients that were used to
+///        calculate the encoded symbol
+KODO_RLNC_API
+void krlnc_decoder_read_symbol(
+    krlnc_decoder_t decoder, uint8_t* symbol_data, uint8_t* coefficients);
+
+/// Reads and decodes a systematic/uncoded symbol with the corresponding
+/// symbol index.
+/// @param decoder The decoder to use.
+/// @param symbol_data The uncoded source symbol.
+/// @param index The index of this uncoded symbol in the data block.
+KODO_RLNC_API
+void krlnc_decoder_read_uncoded_symbol(
+    krlnc_decoder_t decoder, uint8_t* symbol_data, uint32_t index);
 
 //------------------------------------------------------------------
 // COEFFICIENT GENERATOR API
 //------------------------------------------------------------------
 
+/// Set the seed of the coefficient generator.
+/// @param decoder The decoder to use
+/// @param seed_value The seed value for the generator.
+KODO_RLNC_API
+void krlnc_decoder_set_seed(krlnc_decoder_t decoder, uint32_t seed_value);
+
+/// Fills the input buffer with symbol coefficients used for either
+/// encoding or decoding a symbol.
+/// @param decoder The decoder to use.
+/// @param coefficients Pointer to the memory where the coefficients should
+///        be stored. The coefficient buffer should have at least
+///        krlnc_decoder_coefficient_vector_size() capacity.
+KODO_RLNC_API
+void krlnc_decoder_generate(krlnc_decoder_t decoder, uint8_t* coefficients);
+
+/// Generate a "partial" coding vector that will only contain non-zero
+/// coefficients for the symbols that are currently defined.
+/// This allows encoding before defining all original source symbols,
+/// i.e. on-the-fly encoding.
+/// @param decoder The decoder to use.
+/// @param coefficients Pointer to the memory where the coefficients should
+///        be stored. The coefficient buffer should have at least
+///        krlnc_decoder_coefficient_vector_size() capacity.
+KODO_RLNC_API
+void krlnc_decoder_generate_partial(
+    krlnc_decoder_t decoder, uint8_t* coefficients);
 
 //------------------------------------------------------------------
 // TRACE API
@@ -285,6 +360,3 @@ void krlnc_decoder_set_zone_prefix(krlnc_decoder_t decoder, const char* prefix);
 #ifdef __cplusplus
 }
 #endif
-
-// Clean up define
-#undef KODO_RLNC_API

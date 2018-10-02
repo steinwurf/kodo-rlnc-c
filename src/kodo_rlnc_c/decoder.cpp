@@ -3,7 +3,6 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include "encoder.h"
 #include "decoder.h"
 
 #include <cstring>
@@ -215,6 +214,77 @@ uint8_t krlnc_decoder_is_symbol_pivot(krlnc_decoder_t decoder, uint32_t index)
 {
     assert(decoder != nullptr);
     return decoder->m_impl->is_symbol_pivot(index);
+}
+
+void krlnc_decoder_update_symbol_status(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->update_symbol_status();
+}
+
+void krlnc_decoder_set_status_updater_on(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_status_updater_on();
+}
+
+void krlnc_decoder_set_status_updater_off(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_status_updater_off();
+}
+
+uint8_t krlnc_decoder_is_status_updater_enabled(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->is_status_updater_enabled();
+}
+
+//------------------------------------------------------------------
+// SYMBOL API
+//------------------------------------------------------------------
+
+uint32_t krlnc_decoder_coefficient_vector_size(krlnc_decoder_t decoder)
+{
+    assert(decoder != nullptr);
+    return decoder->m_impl->coefficient_vector_size();
+}
+
+void krlnc_decoder_read_symbol(
+    krlnc_decoder_t decoder, uint8_t* symbol_data, uint8_t* coefficients)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->read_symbol(symbol_data, coefficients);
+}
+
+void krlnc_decoder_read_uncoded_symbol(
+    krlnc_decoder_t decoder, uint8_t* symbol_data, uint32_t index)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->read_uncoded_symbol(symbol_data, index);
+}
+
+//------------------------------------------------------------------
+// COEFFICIENT GENERATOR API
+//------------------------------------------------------------------
+
+void krlnc_decoder_set_seed(krlnc_decoder_t decoder, uint32_t seed_value)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->set_seed(seed_value);
+}
+
+void krlnc_decoder_generate(krlnc_decoder_t decoder, uint8_t* coefficients)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->generate(coefficients);
+}
+
+void krlnc_decoder_generate_partial(
+    krlnc_decoder_t decoder, uint8_t* coefficients)
+{
+    assert(decoder != nullptr);
+    decoder->m_impl->generate_partial(coefficients);
 }
 
 //------------------------------------------------------------------

@@ -1,0 +1,24 @@
+{
+    "sphinx": {
+        "cwd": "${source_path}/docs",
+        "branches.regex.filters": ["origin/master"],
+        "branches.source_branch": true,
+        "tags.semver.filters": [">=13.2.0"],
+        "requirements": "${source_path}/docs/requirements.txt",
+        "scripts": [
+            "sphinx-build -b html . ${build_path}/docs/${name} -D release=${name}"
+        ]
+    },
+    "versjon": {
+        "cwd": "${build_path}/docs",
+        "branches.regex.filters": ["origin/master"],
+        "branches.source_branch": true,
+        "tags.semver.filters": [">=13.2.0"],
+        "pip_packages": [
+            "git+https://github.com/steinwurf/versjon.git@a49a7ee1"
+        ],
+        "scripts": [
+            "versjon master$$ \"\\d+\\.\\d+\\.\\d+$$\" ../{path} ${build_path}/docs/${name}/versjon.json"
+        ]
+    }
+}

@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import os
+from waflib.Build import BuildContext
 
 APPNAME = 'kodo-rlnc-c'
 VERSION = '3.0.0'
@@ -62,3 +63,28 @@ def build(bld):
                 start_dir.ant_glob('**/*.h'),
                 cwd=start_dir,
                 relative_trick=True)
+
+
+class DocsContext(BuildContext):
+    cmd = 'docs'
+    fun = 'docs'
+
+
+def docs(ctx):
+
+    with ctx.create_virtualenv(cwd=ctx.bldnode.abspath()) as venv:
+        if not ctx.options.all_docs:
+            venv.run('python -m pip install -r docs/requirements.txt',
+                     cwd=ctx.path.abspath())
+            venv.run('sphinx-build -b html -d build/doctrees docs build/html',
+                     cwd=ctx.path.abspath())
+        else:
+            giit = 'git+https://github.com/steinwurf/giit.git@master'
+            venv.pip_install(packages=[giit])
+            build_path = os.path.join(ctx.path.abspath(), 'build', 'giit')
+            venv.run('giit clean . --build_path {}'.format(build_path),
+                     cwd=ctx.path.abspath())
+            venv.run('giit sphinx . --build_path {}'.format(build_path),
+                     cwd=ctx.path.abspath())
+            venv.run('giit versjon . --build_path {}'.format(build_path),
+                     cwd=ctx.path.abspath())

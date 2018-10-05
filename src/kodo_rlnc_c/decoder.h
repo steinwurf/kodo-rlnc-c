@@ -28,7 +28,7 @@ typedef struct krlnc_decoder* krlnc_decoder_t;
 //------------------------------------------------------------------
 
 /// Build a new decoder factory
-/// @param finite_field The finite field that should be used by the decoder.
+/// @param finite_field_id The finite field that should be used by the decoder.
 /// @param symbols The maximum number of symbols supported by decoders
 ///        built with this factory.
 /// @param symbol_size The maximum symbol size in bytes supported by
@@ -328,7 +328,7 @@ void krlnc_decoder_generate_partial(
 
 /// Enables the default trace function of the decoder, which prints to
 /// the standard output.
-/// @param coder The decoder to use
+/// @param decoder The decoder to use
 KODO_RLNC_API
 void krlnc_decoder_set_trace_stdout(krlnc_decoder_t decoder);
 
@@ -337,7 +337,7 @@ void krlnc_decoder_set_trace_stdout(krlnc_decoder_t decoder);
 /// the krlnc_trace_callback_t function is invoked by the library. This allows
 /// the user to pass custom information to the callback function. If no context
 /// is needed the pointer can be set to NULL.
-/// @param coder The decoder to use
+/// @param decoder The decoder to use
 /// @param callback The callback that processes the trace output
 /// @param context A void pointer which is forwarded to the callback function.
 KODO_RLNC_API
@@ -345,14 +345,14 @@ void krlnc_decoder_set_trace_callback(
     krlnc_decoder_t decoder, krlnc_trace_callback_t callback, void* context);
 
 /// Disables the trace function of the decoder.
-/// @param coder The decoder to use
+/// @param decoder The decoder to use
 KODO_RLNC_API
 void krlnc_decoder_set_trace_off(krlnc_decoder_t decoder);
 
 /// Sets the zone prefix that should be used for the trace output of
 /// a particular decoder instance. The zone prefix can help to
-/// differentiate the output that is coming from various coder instances.
-/// @param coder The decoder to use
+/// differentiate the output that is coming from various decoder instances.
+/// @param decoder The decoder to use
 /// @param prefix The zone prefix for the trace output
 KODO_RLNC_API
 void krlnc_decoder_set_zone_prefix(krlnc_decoder_t decoder, const char* prefix);

@@ -1,0 +1,3 @@
+sphinx
+git+https://github.com/steinwurf/wurfapi@83986e15
+git+https://github.com/steinwurf/guzzle_sphinx_theme@86a6581

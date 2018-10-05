@@ -28,7 +28,7 @@ typedef struct krlnc_encoder* krlnc_encoder_t;
 //------------------------------------------------------------------
 
 /// Build a new encoder factory
-/// @param finite_field The finite field that should be used by the encoder.
+/// @param finite_field_id The finite field that should be used by the encoder.
 /// @param symbols The maximum number of symbols supported by encoders
 ///        built with this factory.
 /// @param symbol_size The maximum symbol size in bytes supported by
@@ -245,7 +245,7 @@ void krlnc_encoder_generate_partial(
     krlnc_encoder_t encoder, uint8_t* coefficients);
 
 /// Returns the density of the generated coding vector coefficients.
-/// @param coder The encoder to query
+/// @param encoder The encoder to query
 /// @return The coding vector density as a float
 KODO_RLNC_API
 float krlnc_encoder_density(krlnc_encoder_t encoder);
@@ -262,7 +262,7 @@ void krlnc_encoder_set_density(krlnc_encoder_t encoder, float density);
 
 /// Enables the default trace function of the encoder, which prints to
 /// the standard output.
-/// @param coder The encoder to use
+/// @param encoder The encoder to use
 KODO_RLNC_API
 void krlnc_encoder_set_trace_stdout(krlnc_encoder_t encoder);
 
@@ -271,7 +271,7 @@ void krlnc_encoder_set_trace_stdout(krlnc_encoder_t encoder);
 /// the krlnc_trace_callback_t function is invoked by the library. This allows
 /// the user to pass custom information to the callback function. If no context
 /// is needed the pointer can be set to NULL.
-/// @param coder The encoder to use
+/// @param encoder The encoder to use
 /// @param callback The callback that processes the trace output
 /// @param context A void pointer which is forwarded to the callback function.
 KODO_RLNC_API
@@ -279,14 +279,14 @@ void krlnc_encoder_set_trace_callback(
     krlnc_encoder_t encoder, krlnc_trace_callback_t callback, void* context);
 
 /// Disables the trace function of the encoder.
-/// @param coder The encoder to use
+/// @param encoder The encoder to use
 KODO_RLNC_API
 void krlnc_encoder_set_trace_off(krlnc_encoder_t encoder);
 
 /// Sets the zone prefix that should be used for the trace output of
 /// a particular encoder instance. The zone prefix can help to
-/// differentiate the output that is coming from various coder instances.
-/// @param coder The encoder to use
+/// differentiate the output that is coming from various encoder instances.
+/// @param encoder The encoder to use
 /// @param prefix The zone prefix for the trace output
 KODO_RLNC_API
 void krlnc_encoder_set_zone_prefix(krlnc_encoder_t encoder, const char* prefix);

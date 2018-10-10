@@ -5,7 +5,7 @@ import os
 from waflib.Build import BuildContext
 
 APPNAME = 'kodo-rlnc-c'
-VERSION = '3.0.0'
+VERSION = '4.0.0'
 
 def build(bld):
 

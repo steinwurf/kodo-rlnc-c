@@ -7,6 +7,9 @@ of every change, see the Git log.
 Latest
 ------
 * tbd
+
+4.0.0
+-----
 * Minor: Added some examples.
 * Major: Separated the kodo_rlnc_c.h header file to encoder.h and decoder.h
   in order to mirror the kodo-rlnc headers.

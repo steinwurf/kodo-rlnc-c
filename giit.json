@@ -3,7 +3,7 @@
         "cwd": "${source_path}/docs",
         "branches.regex.filters": ["origin/master"],
         "branches.source_branch": true,
-        "tags.semver.filters": [">=13.2.0"],
+        "tags.semver.filters": [">=4.0.0"],
         "requirements": "${source_path}/docs/requirements.txt",
         "scripts": [
             "sphinx-build -b html . ${build_path}/docs/${name} -D release=${name}"
@@ -13,7 +13,7 @@
         "cwd": "${build_path}/docs",
         "branches.regex.filters": ["origin/master"],
         "branches.source_branch": true,
-        "tags.semver.filters": [">=13.2.0"],
+        "tags.semver.filters": [">=4.0.0"],
         "pip_packages": [
             "git+https://github.com/steinwurf/versjon.git@a49a7ee1"
         ],

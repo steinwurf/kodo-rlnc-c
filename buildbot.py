@@ -4,6 +4,7 @@
 import os
 import sys
 import json
+import shutil
 import subprocess
 
 project_name = 'kodo-rlnc-c'
@@ -74,11 +75,41 @@ def install(properties):
     command = [sys.executable, 'waf', '-v', 'install']
 
     if 'install_path' in properties:
-        command += ['--install_path={0}'.format(properties['install_path'])]
+        install_path = properties['install_path']
+        command += ['--install_path={0}'.format(install_path)]
+        # Make sure that the previous install folder is removed
+        if os.path.isdir(install_path):
+            shutil.rmtree(install_path)
     if properties.get('install_relative'):
         command += ['--install_relative']
-
+    command += ['--install_static_libs']
     run_command(command)
+
+    # The following compilation test is only executed when the native g++ can
+    # be used (cross-compilers should be ignored since they built the static
+    # libs for a different platform)
+    mkspec = properties.get('cxx_mkspec', '')
+    if not mkspec.startswith('cxx_gxx'):
+        return
+
+    # After installing the headers and static libs, we test the standalone
+    # compilation of an example without invoking waf
+    example_path = os.path.join(install_path, 'temp_example')
+    # Create a temporary folder for the example and copy the source file
+    if not os.path.isdir(example_path):
+        os.makedirs(example_path)
+    example_source = os.path.join(
+        'examples', 'encode_decode_simple', 'encode_decode_simple.c')
+    shutil.copy(example_source, example_path)
+    # Invoke gcc with a minimal set of flags to compile the C example
+    os.chdir(example_path)
+    command = ['gcc', 'encode_decode_simple.c', '-o', 'encode_decode_simple']
+    command += ['-I../include', '-Wl,-Bstatic', '-L..']
+    command += ['-lkodo_rlnc_c_static', '-lkodo_rlnc', '-lfifi', '-lcpuid']
+    command += ['-Wl,-Bdynamic', '-lm', '-lstdc++']
+    run_command(command)
+    # Run the example
+    run_command(['./encode_decode_simple'])
 
 
 def coverage_settings(options):

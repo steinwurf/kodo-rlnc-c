@@ -89,7 +89,7 @@ def install(properties):
     # be used (cross-compilers should be ignored since they built the static
     # libs for a different platform)
     mkspec = properties.get('cxx_mkspec', '')
-    if not mkspec.startswith('cxx_gxx'):
+    if not mkspec.startswith('cxx_gxx') or mkspec.endswith('armv7'):
         return
 
     # After installing the headers and static libs, we test the standalone

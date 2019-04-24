@@ -5,7 +5,7 @@ Including kodo-rlnc-c in Your Application
 
 This guide shows how to include kodo-rlnc-c in your application.
 
-First of all, you need to build kodo-rln-c following the
+First of all, you need to build kodo-rlnc-c following the
 :ref:`quick_start_kodo_rlnc_c` guide. If you want to cross-compile for your
 target platform (e.g. Android, iOS, Raspberry Pi), please follow the
 `Cross-compilation <http://docs.steinwurf.com/cross_compile.html>`_ guide.
@@ -102,3 +102,70 @@ automatically includes the stdc++ library)::
 
     g++ myapp.c -o myapp -I./include -Wl,-Bstatic -L. -lkodo_rlnc_c_static \
     -lkodo_rlnc -lfifi -lcpuid -Wl,-Bdynamic
+
+Using CMake as a Build System
+-----------------------------
+
+It is also possible to integrate kodo-rlnc-c with the CMake build system.
+
+The following steps will show how to compile a simple kodo-rlnc example using
+CMake.
+
+#. As a starting point, we assume that you completed the kodo-rlnc-c
+   :ref:`quick_start_kodo_rlnc_c` section and you can successfully execute our
+   unit tests with this command::
+
+    python waf --run_tests
+
+#. Then we will copy the static libraries to the ``~/cmake_test/kodo_build``
+   folder (these static libraries must be linked to your application)::
+
+    python waf install --install_path=~/cmake_test/kodo_build --install_static_libs --install_relative
+
+   This command also installs the necessary header files into the ``include``
+   subfolder of the ``kodo_build`` folder.
+
+#. Now we copy an existing kodo-rlnc-c example (encode_decode_simple) to the
+   ``cmake_test`` folder ::
+
+    cp examples/encode_decode_simple/encode_decode_simple.c ~/cmake_test/
+
+#. Then we go to the ``cmake_test`` folder and create a ``CMakeLists.txt``
+   file (you can use any text editor for this)::
+
+    cd ~/cmake_test
+    nano CMakeLists.txt
+
+   Add the following lines to this text file and save it::
+
+    cmake_minimum_required(VERSION 2.8)
+
+    project(kodo_test)
+
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm -lstdc++")
+
+    include_directories(${PROJECT_SOURCE_DIR}/kodo_build/include)
+
+    set(KODO_LIBS kodo_rlnc_c_static kodo_rlnc fifi cpuid)
+    link_directories(${PROJECT_SOURCE_DIR}/kodo_build)
+
+    add_executable(kodo_test encode_decode_simple.c)
+    target_link_libraries(kodo_test ${KODO_LIBS})
+
+   Since CMake will call a C compiler (gcc) to compile our pure C example,
+   it is important to add some flags to CMAKE_EXE_LINKER_FLAGS to link with
+   libstdc++ (the C++ standard library) and libm. You might need different
+   flags if you use a different compiler.
+
+   We also add the ``kodo_build/include`` folder to the include path and
+   define a list of the static libraries that we need to link to our executable.
+
+#. Now we can call CMake to generate the build files and invoke make to
+   build the ``kodo_test`` executable that we defined in ``CMakeLists.txt``::
+
+    cmake .
+    make
+
+#. If everything went fine, then you can run the new executable::
+
+    ./kodo_test

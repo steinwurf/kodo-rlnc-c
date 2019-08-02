@@ -66,9 +66,7 @@ the target folder which will be ``static_test`` in this example)::
     python waf install --install_static_libs --install_path="./static_test"
 
 The kodo-rlnc-c static library is called ``libkodo_rlnc_c_static.a`` on Linux
-and Mac and ``kodo_rlnc_c_static.lib`` on Windows. The install command also
-installs the static libraries from the kodo-rlnc-c dependencies (you will need
-the ``kodo_rlnc``, ``fifi`` and ``cpuid`` libraries as well).
+and Mac and ``kodo_rlnc_c_static.lib`` on Windows.
 
 You can link with these static libraries using your own build system. Of course,
 you will need to include ``encoder.h`` or ``decoder.h`` in your code (which
@@ -84,7 +82,7 @@ The following command demonstrates the necessary flags for the gcc/g++ compiler
 (other compilers require similar settings)::
 
     gcc myapp.c -o myapp -I./include -Wl,-Bstatic -L. -lkodo_rlnc_c_static \
-    -lkodo_rlnc -lfifi -lcpuid -Wl,-Bdynamic -lm -lstdc++
+    -Wl,-Bdynamic -lm -lstdc++
 
 In practice, you should set the ``-I`` and ``-L`` flags to the path where you
 installed the static libraries.
@@ -101,7 +99,7 @@ this flag if you link your application with g++ instead of gcc (g++
 automatically includes the stdc++ library)::
 
     g++ myapp.c -o myapp -I./include -Wl,-Bstatic -L. -lkodo_rlnc_c_static \
-    -lkodo_rlnc -lfifi -lcpuid -Wl,-Bdynamic
+    -Wl,-Bdynamic
 
 Using CMake as a Build System
 -----------------------------
@@ -146,7 +144,7 @@ CMake.
 
     include_directories(${PROJECT_SOURCE_DIR}/kodo_build/include)
 
-    set(KODO_LIBS kodo_rlnc_c_static kodo_rlnc fifi cpuid)
+    set(KODO_LIBS kodo_rlnc_c_static)
     link_directories(${PROJECT_SOURCE_DIR}/kodo_build)
 
     add_executable(kodo_test encode_decode_simple.c)

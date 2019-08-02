@@ -38,8 +38,8 @@ extern "C" {
 // COMMON TYPES
 //------------------------------------------------------------------
 
-/// Callback function type used for tracing
-typedef void (*krlnc_trace_callback_t)(const char*, const char*, void*);
+/// Callback function type used for logging
+typedef void (*krlnc_log_callback_t)(const char*, const char*, void*);
 
 /// Enum specifying the available finite fields
 /// Note: the size of the enum type cannot be guaranteed, so the int32_t type

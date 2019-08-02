@@ -7,21 +7,21 @@
 
 #include <kodo_rlnc/coders.hpp>
 
-inline fifi::api::field c_field_to_krlnc_field(int32_t field)
+inline fifi::finite_field c_field_to_krlnc_field(int32_t field)
 {
     switch (field)
     {
     case krlnc_binary:
-        return fifi::api::field::binary;
+        return fifi::finite_field::binary;
     case krlnc_binary4:
-        return fifi::api::field::binary4;
+        return fifi::finite_field::binary4;
     case krlnc_binary8:
-        return fifi::api::field::binary8;
+        return fifi::finite_field::binary8;
     case krlnc_binary16:
-        return fifi::api::field::binary16;
+        return fifi::finite_field::binary16;
     default:
         assert(false && "Unknown field");
-        return fifi::api::field::binary;
+        return fifi::finite_field::binary;
     }
 }
 

@@ -50,7 +50,6 @@ int main(int argc, char* argv[])
     uint32_t symbol_size = 160;
     int32_t finite_field = krlnc_binary8;
 
-    krlnc_decoder_factory_t decoder_factory = NULL;
     krlnc_decoder_t decoder = NULL;
 
     // The buffer used to receive incoming packets
@@ -111,21 +110,19 @@ int main(int argc, char* argv[])
     // Install signal handler
     signal(SIGINT, exit_on_sigint);
 
-    // Initialize the factory with the chosen symbols and symbol size
+    // Initialize the encoder with the chosen symbols and symbol size
     symbols = atoi(argv[2]);
 
-    // Create the encoder factory
-    decoder_factory = krlnc_new_decoder_factory(
+    decoder = krlnc_create_decoder(
         finite_field, symbols, symbol_size);
-    decoder = krlnc_decoder_factory_build(decoder_factory);
 
     // Create the buffer needed for the payload
-    payload_size = krlnc_decoder_payload_size(decoder);
+    payload_size = krlnc_decoder_max_payload_size(decoder);
     payload = (uint8_t*) malloc(payload_size);
 
     uint32_t block_size = krlnc_decoder_block_size(decoder);
     uint8_t* data_out = (uint8_t*) malloc(block_size);
-    krlnc_decoder_set_mutable_symbols(decoder, data_out, block_size);
+    krlnc_decoder_set_symbols_storage(decoder, data_out);
 
     // Zero initialize the decoded array */
     memset(decoded, '\0', sizeof(uint8_t) * symbols);
@@ -157,14 +154,14 @@ int main(int argc, char* argv[])
         ++rx_packets;
 
         // Packet got through - pass that packet to the decoder
-        krlnc_decoder_read_payload(decoder, payload);
+        krlnc_decoder_consume_payload(decoder, payload);
 
         if (krlnc_decoder_is_partially_complete(decoder))
         {
             uint32_t i = 0;
             for (; i < symbols; ++i)
             {
-                if (!krlnc_decoder_is_symbol_uncoded(decoder, i))
+                if (!krlnc_decoder_is_symbol_decoded(decoder, i))
                     continue;
 
                 if (!decoded[i])
@@ -187,7 +184,6 @@ int main(int argc, char* argv[])
     free(payload);
 
     krlnc_delete_decoder(decoder);
-    krlnc_delete_decoder_factory(decoder_factory);
 
     return 0;
 }

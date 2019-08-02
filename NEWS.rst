@@ -7,6 +7,16 @@ of every change, see the Git log.
 Latest
 ------
 * tbd
+* Major: The factories were removed from the API, therefore new coder objects
+  can be instantiated using krlnc_create_encoder and krlnc_create_decoder.
+* Major: The write_payload and write_symbol functions were renamed to
+  produce_payload and produce_symbol (including their variants).
+* Major: The read_payload and read_symbol functions were renamed to
+  consume_payload and consume_symbol (including their variants).
+* Major: The uncoded designation was renamed to decoded in all function names
+  to improve consistency in the API.
+* Major: The trace designation was changed to log in all function names.
+* Major: Upgrade to kodo-rlnc 15
 
 4.0.0
 -----

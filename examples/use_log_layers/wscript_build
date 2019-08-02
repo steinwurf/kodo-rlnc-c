@@ -2,6 +2,6 @@
 # encoding: utf-8
 
 bld.program(features='cxx limit_includes',
-            source='use_trace_layers.c',
-            target='use_trace_layers',
+            source='use_log_layers.c',
+            target='use_log_layers',
             use=['kodo_rlnc_c_static'])

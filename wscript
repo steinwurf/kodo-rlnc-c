@@ -3,9 +3,30 @@
 
 import os
 from waflib.Build import BuildContext
+from waflib.extras.wurf.directory import remove_directory
 
 APPNAME = 'kodo-rlnc-c'
 VERSION = '4.0.0'
+
+
+def options(opt):
+
+    opt.add_option(
+        '--all_docs', default=False, action='store_true',
+        help='Generate all documentation versions using giit.')
+
+
+def configure(conf):
+
+    if conf.is_toplevel():
+
+        # Make sure we recreate the docs virtualenv on (re-)configure
+        venv_path = os.path.join(
+            conf.path.abspath(), "build", "virtualenv-docs")
+
+        if os.path.isdir(venv_path):
+            remove_directory(venv_path)
+
 
 def build(bld):
 
@@ -51,7 +72,7 @@ def build(bld):
         bld.recurse('examples/symbol_status_updater')
         bld.recurse('examples/udp_sender_receiver')
         bld.recurse('examples/uncoded_symbols')
-        bld.recurse('examples/use_trace_layers')
+        bld.recurse('examples/use_log_layers')
 
         # Install the header files to the 'include' folder
         if bld.has_tool_option('install_path'):
@@ -72,19 +93,23 @@ class DocsContext(BuildContext):
 
 def docs(ctx):
 
-    with ctx.create_virtualenv(cwd=ctx.bldnode.abspath()) as venv:
-        if not ctx.options.all_docs:
-            venv.run('python -m pip install -r docs/requirements.txt',
-                     cwd=ctx.path.abspath())
-            venv.run('sphinx-build -b html -d build/doctrees docs build/html',
-                     cwd=ctx.path.abspath())
-        else:
-            giit = 'git+https://github.com/steinwurf/giit.git@master'
-            venv.pip_install(packages=[giit])
-            build_path = os.path.join(ctx.path.abspath(), 'build', 'giit')
-            venv.run('giit clean . --build_path {}'.format(build_path),
-                     cwd=ctx.path.abspath())
-            venv.run('giit sphinx . --build_path {}'.format(build_path),
-                     cwd=ctx.path.abspath())
-            venv.run('giit versjon . --build_path {}'.format(build_path),
-                     cwd=ctx.path.abspath())
+    build_path = os.path.join(ctx.path.abspath(), 'build')
+    venv = ctx.create_virtualenv(
+        cwd=build_path, name="virtualenv-docs", overwrite=False)
+
+    if not ctx.options.all_docs:
+        venv.run('python -m pip install -r docs/requirements.txt',
+                 cwd=ctx.path.abspath())
+        venv.run('sphinx-build -v -E -a -D release={} -b html '
+                 '-d build/doctrees docs build/html'.format(VERSION),
+                 cwd=ctx.path.abspath())
+    else:
+        giit = 'git+https://github.com/steinwurf/giit.git@master'
+        venv.run('pip install {}'.format(giit))
+        build_path = os.path.join(ctx.path.abspath(), 'build', 'giit')
+        venv.run('giit clean . --build_path {}'.format(build_path),
+                 cwd=ctx.path.abspath())
+        venv.run('giit sphinx . --build_path {}'.format(build_path),
+                 cwd=ctx.path.abspath())
+        venv.run('giit versjon . --build_path {}'.format(build_path),
+                 cwd=ctx.path.abspath())

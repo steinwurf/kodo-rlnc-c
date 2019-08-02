@@ -32,16 +32,11 @@ int main()
     // Here we select the finite field to use
     int32_t finite_field = krlnc_binary8;
 
-    // First, we create an encoder & decoder factory.
-    // The factories are used to build actual encoders/decoders
-    krlnc_encoder_factory_t encoder_factory = krlnc_new_encoder_factory(
+    krlnc_encoder_t encoder = krlnc_create_encoder(
         finite_field, symbols, symbol_size);
 
-    krlnc_decoder_factory_t decoder_factory = krlnc_new_decoder_factory(
+    krlnc_decoder_t decoder = krlnc_create_decoder(
         finite_field, symbols, symbol_size);
-
-    krlnc_encoder_t encoder = krlnc_encoder_factory_build(encoder_factory);
-    krlnc_decoder_t decoder = krlnc_decoder_factory_build(decoder_factory);
 
     // Allocate some storage for a coded symbol
     uint8_t* symbol = (uint8_t*) malloc(symbol_size);
@@ -58,8 +53,8 @@ int main()
     for (; i < block_size; ++i)
         data_in[i] = rand() % 256;
 
-    krlnc_encoder_set_const_symbols(encoder, data_in, block_size);
-    krlnc_decoder_set_mutable_symbols(decoder, data_out, block_size);
+    krlnc_encoder_set_symbols_storage(encoder, data_in);
+    krlnc_decoder_set_symbols_storage(decoder, data_out);
 
     while (!krlnc_decoder_is_complete(decoder))
     {
@@ -67,10 +62,10 @@ int main()
         krlnc_encoder_generate(encoder, coefficients);
 
         // Write a coded symbol to the symbol buffer
-        krlnc_encoder_write_symbol(encoder, symbol, coefficients);
+        krlnc_encoder_produce_symbol(encoder, symbol, coefficients);
 
         // Pass that symbol and the corresponding coefficients to the decoder
-        krlnc_decoder_read_symbol(decoder, symbol, coefficients);
+        krlnc_decoder_consume_symbol(decoder, symbol, coefficients);
         printf("Symbol processed by decoder, current rank = %d\n",
                krlnc_decoder_rank(decoder));
     }
@@ -91,9 +86,6 @@ int main()
 
     krlnc_delete_encoder(encoder);
     krlnc_delete_decoder(decoder);
-
-    krlnc_delete_encoder_factory(encoder_factory);
-    krlnc_delete_decoder_factory(decoder_factory);
 
     return 0;
 }

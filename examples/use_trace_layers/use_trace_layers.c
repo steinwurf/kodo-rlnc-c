@@ -12,9 +12,9 @@
 #include <kodo_rlnc_c/encoder.h>
 #include <kodo_rlnc_c/decoder.h>
 
-/// @example use_trace_layers.c
+/// @example use_log_layers.c
 ///
-/// Simple example to show the trace functionality.
+/// Simple example to show the log functionality.
 
 // Helper function to determine if a string ends with a certain suffix
 int ends_with(const char* str, const char* suffix)
@@ -26,15 +26,15 @@ int ends_with(const char* str, const char* suffix)
     return strncmp(str + len_str - len_suffix, suffix, len_suffix) == 0;
 }
 
-// This callback function will be called when the decoder produces trace output
-void trace_callback(const char* zone, const char* data, void* context)
+// This callback function will be called when the decoder produces log output
+void log_callback(const char* zone, const char* data, void* context)
 {
     (void) context;
     // The zone string starts with our custom prefix, so it is easier to
     // check if the zone ends with a given suffix
     if (ends_with(zone, "decoder_state") ||
         ends_with(zone, "symbol_coefficients_before_read_symbol") ||
-        ends_with(zone, "symbol_index_before_read_uncoded_symbol"))
+        ends_with(zone, "symbol_index_before_read_decoded_symbol"))
     {
         printf("%s:\n", zone);
         printf("%s\n", data);
@@ -50,23 +50,17 @@ int main()
     // terminology) and the size of a symbol in bytes
     uint32_t symbols = 3;
     uint32_t symbol_size = 16;
-
     int32_t finite_field = krlnc_binary8;
 
-    // First, we create an encoder & decoder factory.
-    // The factories are used to build actual encoders/decoders
-    krlnc_encoder_factory_t encoder_factory = krlnc_new_encoder_factory(
+    krlnc_encoder_t encoder = krlnc_create_encoder(
         finite_field, symbols, symbol_size);
 
-    krlnc_decoder_factory_t decoder_factory = krlnc_new_decoder_factory(
+    krlnc_decoder_t decoder = krlnc_create_decoder(
         finite_field, symbols, symbol_size);
-
-    krlnc_encoder_t encoder = krlnc_encoder_factory_build(encoder_factory);
-    krlnc_decoder_t decoder = krlnc_decoder_factory_build(decoder_factory);
 
     // Allocate some storage for a "payload" the payload is what we would
     // eventually send over a network
-    uint32_t payload_size = krlnc_encoder_payload_size(encoder);
+    uint32_t payload_size = krlnc_encoder_max_payload_size(encoder);
     uint8_t* payload = (uint8_t*) malloc(payload_size);
 
     // Allocate some data to encode. In this case we make a buffer
@@ -82,34 +76,34 @@ int main()
         data_in[i] = rand() % 256;
     }
 
-    // Install the stdout trace function for the encoder (everything will
+    // Install the stdout log function for the encoder (everything will
     // be printed to stdout without filtering)
-    krlnc_encoder_set_trace_stdout(encoder);
+    krlnc_encoder_set_log_stdout(encoder);
     // Set a custom zone prefix for the encoder (this helps to differentiate
-    // the trace output of the encoder and the decoder)
+    // the log output of the encoder and the decoder)
     krlnc_encoder_set_zone_prefix(encoder, "Encoder");
 
-    // Install a custom trace function for the decoder (we can process and
-    // filter the data in our trace callback)
-    krlnc_decoder_set_trace_callback(decoder, trace_callback, NULL);
+    // Install a custom log function for the decoder (we can process and
+    // filter the data in our log callback)
+    krlnc_decoder_set_log_callback(decoder, log_callback, NULL);
     // Set a custom zone prefix for the decoder
     krlnc_decoder_set_zone_prefix(decoder, "Decoder");
 
-    krlnc_encoder_set_const_symbols(encoder, data_in, block_size);
+    krlnc_encoder_set_symbols_storage(encoder, data_in);
 
     uint8_t* data_out = (uint8_t*) malloc(block_size);
-    krlnc_decoder_set_mutable_symbols(decoder, data_out, block_size);
+    krlnc_decoder_set_symbols_storage(decoder, data_out);
 
     while (!krlnc_decoder_is_complete(decoder))
     {
-        krlnc_encoder_write_payload(encoder, payload);
+        krlnc_encoder_produce_payload(encoder, payload);
 
         if ((rand() % 2) == 0)
         {
             continue;
         }
 
-        krlnc_decoder_read_payload(decoder, payload);
+        krlnc_decoder_consume_payload(decoder, payload);
     }
 
     if (memcmp(data_in, data_out, block_size) == 0)
@@ -127,9 +121,6 @@ int main()
 
     krlnc_delete_encoder(encoder);
     krlnc_delete_decoder(decoder);
-
-    krlnc_delete_encoder_factory(encoder_factory);
-    krlnc_delete_decoder_factory(decoder_factory);
 
     return 0;
 }

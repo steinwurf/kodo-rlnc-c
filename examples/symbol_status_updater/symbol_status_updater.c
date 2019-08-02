@@ -30,20 +30,15 @@ int main()
     // smaller field.
     int32_t finite_field = krlnc_binary;
 
-    // First, we create an encoder & decoder factory.
-    // The factories are used to build actual encoders/decoders
-    krlnc_encoder_factory_t encoder_factory = krlnc_new_encoder_factory(
+    krlnc_encoder_t encoder = krlnc_create_encoder(
         finite_field, symbols, symbol_size);
 
-    krlnc_decoder_factory_t decoder_factory = krlnc_new_decoder_factory(
+    krlnc_decoder_t decoder1 = krlnc_create_decoder(
         finite_field, symbols, symbol_size);
 
-    krlnc_encoder_t encoder = krlnc_encoder_factory_build(encoder_factory);
-
-    // Create two decoders: one which has the status updater turned on and one
-    // which has it off.
-    krlnc_decoder_t decoder1 = krlnc_decoder_factory_build(decoder_factory);
-    krlnc_decoder_t decoder2 = krlnc_decoder_factory_build(decoder_factory);
+    // Create a second decoder where the status updater will be turned off.
+    krlnc_decoder_t decoder2 = krlnc_create_decoder(
+        finite_field, symbols, symbol_size);
 
     krlnc_decoder_set_status_updater_on(decoder2);
 
@@ -52,7 +47,7 @@ int main()
     printf("decoder 2 status updater: %d\n",
            krlnc_decoder_is_status_updater_enabled(decoder2));
 
-    uint32_t payload_size = krlnc_encoder_payload_size(encoder);
+    uint32_t payload_size = krlnc_encoder_max_payload_size(encoder);
     uint8_t* payload1 = (uint8_t*) malloc(payload_size);
     uint8_t* payload2 = (uint8_t*) malloc(payload_size);
 
@@ -65,9 +60,9 @@ int main()
     for (; i < block_size; ++i)
         data_in[i] = rand() % 256;
 
-    krlnc_encoder_set_const_symbols(encoder, data_in, block_size);
-    krlnc_decoder_set_mutable_symbols(decoder1, data_out1, block_size);
-    krlnc_decoder_set_mutable_symbols(decoder2, data_out2, block_size);
+    krlnc_encoder_set_symbols_storage(encoder, data_in);
+    krlnc_decoder_set_symbols_storage(decoder1, data_out1);
+    krlnc_decoder_set_symbols_storage(decoder2, data_out2);
 
     // Skip the systematic phase as the effect of the symbol status decoder is
     // only visible when reading coded packets.
@@ -75,16 +70,16 @@ int main()
 
     while (!krlnc_decoder_is_complete(decoder1))
     {
-        krlnc_encoder_write_payload(encoder, payload1);
+        krlnc_encoder_produce_payload(encoder, payload1);
         // Copy payload1, because the decoder modifies the payload buffer
         // during read_payload, so we cannot use the same payload twice!
         memcpy(payload2, payload1, payload_size);
 
         // Pass the generated packet to the decoder
-        krlnc_decoder_read_payload(decoder1, payload1);
-        krlnc_decoder_read_payload(decoder2, payload2);
-        printf("decoder1: %d\n", krlnc_decoder_symbols_uncoded(decoder1));
-        printf("decoder2: %d\n", krlnc_decoder_symbols_uncoded(decoder2));
+        krlnc_decoder_consume_payload(decoder1, payload1);
+        krlnc_decoder_consume_payload(decoder2, payload2);
+        printf("decoder1: %d\n", krlnc_decoder_symbols_decoded(decoder1));
+        printf("decoder2: %d\n", krlnc_decoder_symbols_decoded(decoder2));
         printf("-----------------\n");
     }
 
@@ -107,9 +102,6 @@ int main()
     krlnc_delete_encoder(encoder);
     krlnc_delete_decoder(decoder1);
     krlnc_delete_decoder(decoder2);
-
-    krlnc_delete_encoder_factory(encoder_factory);
-    krlnc_delete_decoder_factory(decoder_factory);
 
     return 0;
 }

@@ -105,7 +105,7 @@ def docs(ctx):
                  cwd=ctx.path.abspath())
     else:
         giit = 'git+https://github.com/steinwurf/giit.git@master'
-        venv.pip_install(packages=[giit])
+        venv.run('pip install {}'.format(giit))
         build_path = os.path.join(ctx.path.abspath(), 'build', 'giit')
         venv.run('giit clean . --build_path {}'.format(build_path),
                  cwd=ctx.path.abspath())

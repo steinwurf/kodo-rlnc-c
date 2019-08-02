@@ -33,8 +33,8 @@ void log_callback(const char* zone, const char* data, void* context)
     // The zone string starts with our custom prefix, so it is easier to
     // check if the zone ends with a given suffix
     if (ends_with(zone, "decoder_state") ||
-        ends_with(zone, "symbol_coefficients_before_read_symbol") ||
-        ends_with(zone, "symbol_index_before_read_decoded_symbol"))
+        ends_with(zone, "symbol_coefficients_before_consume_symbol") ||
+        ends_with(zone, "symbol_index_before_consume_systematic_symbol"))
     {
         printf("%s:\n", zone);
         printf("%s\n", data);

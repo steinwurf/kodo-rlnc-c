@@ -72,7 +72,7 @@ def build(bld):
         bld.recurse('examples/symbol_status_updater')
         bld.recurse('examples/udp_sender_receiver')
         bld.recurse('examples/uncoded_symbols')
-        bld.recurse('examples/use_trace_layers')
+        bld.recurse('examples/use_log_layers')
 
         # Install the header files to the 'include' folder
         if bld.has_tool_option('install_path'):

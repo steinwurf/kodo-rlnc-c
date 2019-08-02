@@ -79,7 +79,6 @@ void krlnc_decoder_set_symbol_storage(
 /// This will specify the storage for all symbols.
 /// @param decoder The decoder which will decode the data
 /// @param data The buffer that should contain the decoded symbols
-/// @param size The size of the buffer to be decoded
 KODO_RLNC_API
 void krlnc_decoder_set_symbols_storage(
     krlnc_decoder_t decoder, uint8_t* data);

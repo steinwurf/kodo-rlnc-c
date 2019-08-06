@@ -19,7 +19,7 @@ target_link_libraries(kodo_rlnc_c
     PRIVATE steinwurf::kodo_rlnc
     PRIVATE steinwurf::fifi # from kodo-rlnc
 )
-
+target_compile_definitions(kodo_rlnc_c PUBLIC KODO_RLNC_C_STATIC)
 target_compile_features(kodo_rlnc_c PUBLIC cxx_std_14)
 
 target_include_directories(kodo_rlnc_c INTERFACE src)

@@ -49,3 +49,16 @@ Configure and build the project::
 Run the unit tests::
 
   python waf --run_tests
+
+Use as Dependency in CMake
+--------------------------
+
+To depend on this project when using the CMake build system, add the following
+in your CMake build script:
+
+::
+
+   add_subdirectory("/path/to/kodo-rlnc-c" kodo_rlnc_c)
+   target_link_libraries(<my_target> steinwurf::kodo_rlnc_c)
+
+Where ``<my_target>`` is replaced by your target.

@@ -6,6 +6,10 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+5.0.0
+-----
 * Minor: Added cmake.
 * Major: The factories were removed from the API, therefore new coder objects
   can be instantiated using krlnc_create_encoder and krlnc_create_decoder.

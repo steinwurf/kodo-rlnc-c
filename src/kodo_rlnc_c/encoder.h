@@ -71,7 +71,7 @@ uint32_t krlnc_encoder_symbols(krlnc_encoder_t encoder);
 /// @return The block size, i.e. the total size in bytes that this encoder
 ///         operates on.
 KODO_RLNC_API
-uint32_t krlnc_encoder_block_size(krlnc_encoder_t encoder);
+uint64_t krlnc_encoder_block_size(krlnc_encoder_t encoder);
 
 /// Specifies the source data for a given symbol.
 /// @param encoder The encoder which will encode the symbol

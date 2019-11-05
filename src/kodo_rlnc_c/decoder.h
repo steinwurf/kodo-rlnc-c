@@ -64,7 +64,7 @@ uint32_t krlnc_decoder_symbol_size(krlnc_decoder_t decoder);
 /// @return The block size, i.e. the total size in bytes that this decoder
 ///         operates on.
 KODO_RLNC_API
-uint32_t krlnc_decoder_block_size(krlnc_decoder_t decoder);
+uint64_t krlnc_decoder_block_size(krlnc_decoder_t decoder);
 
 /// Specifies the data buffer where the decoder should store a given symbol.
 /// @param decoder The decoder which will decode the symbol

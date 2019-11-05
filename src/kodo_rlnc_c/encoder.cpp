@@ -58,7 +58,7 @@ void krlnc_encoder_set_coding_vector_format(
 // SYMBOL STORAGE API
 //------------------------------------------------------------------
 
-uint32_t krlnc_encoder_block_size(krlnc_encoder_t encoder)
+uint64_t krlnc_encoder_block_size(krlnc_encoder_t encoder)
 {
     assert(encoder != nullptr);
     return encoder->m_impl.block_size();

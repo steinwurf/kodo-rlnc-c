@@ -50,7 +50,7 @@ void krlnc_reset_decoder(krlnc_decoder_t decoder)
 // SYMBOL STORAGE API
 //------------------------------------------------------------------
 
-uint32_t krlnc_decoder_block_size(krlnc_decoder_t decoder)
+uint64_t krlnc_decoder_block_size(krlnc_decoder_t decoder)
 {
     assert(decoder != nullptr);
     return decoder->m_impl.block_size();

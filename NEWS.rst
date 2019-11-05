@@ -6,7 +6,8 @@ of every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Changed resolve step in CMake file.
+* Minor: Lowered CMake version requirement.
 
 5.0.0
 -----

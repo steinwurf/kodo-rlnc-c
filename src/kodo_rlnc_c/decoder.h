@@ -38,7 +38,7 @@ krlnc_decoder_t krlnc_create_decoder(
 KODO_RLNC_API
 void krlnc_delete_decoder(krlnc_decoder_t decoder);
 
-/// Reset the encoder and ensure that the object is in a clean state.
+/// Reset the decoder and ensure that the object is in a clean state.
 /// @param decoder The decoder which should be reset
 KODO_RLNC_API
 void krlnc_reset_decoder(krlnc_decoder_t decoder);

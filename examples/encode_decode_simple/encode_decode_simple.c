@@ -42,11 +42,11 @@ int main()
     uint32_t payload_size = krlnc_encoder_max_payload_size(encoder);
     uint8_t* payload = (uint8_t*) malloc(payload_size);
 
-    uint32_t block_size = krlnc_encoder_block_size(encoder);
+    uint64_t block_size = krlnc_encoder_block_size(encoder);
     uint8_t* data_in = (uint8_t*) malloc(block_size);
     uint8_t* data_out = (uint8_t*) malloc(block_size);
 
-    uint32_t i = 0;
+    uint64_t i = 0;
     for (; i < block_size; ++i)
         data_in[i] = rand() % 256;
 

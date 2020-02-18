@@ -42,7 +42,7 @@ int main()
     uint32_t payload_size = krlnc_encoder_max_payload_size(encoder);
     uint8_t* payload = (uint8_t*) malloc(payload_size);
 
-    uint64_t block_size = krlnc_encoder_block_size(encoder);
+    size_t block_size = (size_t) krlnc_encoder_block_size(encoder);
     uint8_t* data_in = (uint8_t*) malloc(block_size);
     uint8_t* data_out = (uint8_t*) malloc(block_size);
 

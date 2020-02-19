@@ -15,7 +15,7 @@ project_dependencies = \
         'waf-tools',
         'gtest',
         'boost',
-        'allocate',
+        'bourne',
         'storage',
         'cpuid',
         'platform',

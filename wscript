@@ -6,7 +6,7 @@ from waflib.Build import BuildContext
 from waflib.extras.wurf.directory import remove_directory
 
 APPNAME = 'kodo-rlnc-c'
-VERSION = '6.1.0'
+VERSION = '7.0.0'
 
 
 def options(opt):

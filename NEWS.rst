@@ -6,6 +6,10 @@ of every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+7.0.0
+-----
 * Major: Change cmake build to be object library based.
 * Major: Upgrade to kodo-rlnc 17
 
